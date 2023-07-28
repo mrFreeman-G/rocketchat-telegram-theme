@@ -4,7 +4,7 @@
 
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
 
-- JS and CSS code was developed from user position (when you dont have permissions to change css and js on server side), so to make this works you need to install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- JS and CSS code was developed from user position (when you dont have permissions to change css and js on server side), so to make this works you need to install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) and add CSS and JS on your rocketchat web page.
 - works on Rocket.Chat 3.9 server version
 
 ### Current features:
