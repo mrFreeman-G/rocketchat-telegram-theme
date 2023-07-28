@@ -37,6 +37,10 @@
  - [ ] no adaptation on narrow screen size (WIP)
  - [ ] there may be problems with a slower Internet connection (WIP)
 
+### Known issues:
+ - [ ] server side theme install
+
+
 ## Previews
 
 ### thread's
