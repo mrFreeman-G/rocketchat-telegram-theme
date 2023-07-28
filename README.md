@@ -1,4 +1,4 @@
-# rocketchat-telegram-theme
+# Telegram theme for Rocketchat
 > "Is it telegram?! No it's rocketchat :("
 --
 
