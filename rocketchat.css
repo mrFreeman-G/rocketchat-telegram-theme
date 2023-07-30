@@ -244,6 +244,7 @@ ul.messages-list > .rcx-message:before {
 	z-index: -1;
 	background-color: var(--rcx-color-surface-light);
 	border-radius: 20px;
+	box-shadow: 2px 2px 2px 0px #00000021;
 }
 ul.messages-list > .rcx-message:after {
 	/* triangle from avatar */
@@ -364,11 +365,16 @@ ul.messages-list > .rcx-message:hover {
 }
 
 /* message > avatar */
-.rcx-message-container.rcx-message-container--left > figure.rcx-box.rcx-box--full.rcx-avatar {
+/* .rcx-message-container.rcx-message-container--left > figure.rcx-box.rcx-box--full.rcx-avatar { */
+.rcx-message-container.rcx-message-container--left > figure.rcx-avatar {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
 	overflow: hidden;
+}
+.rcx-message-container.rcx-message-container--left > figure.rcx-avatar img {
+	width: initial;
+	height: initial;
 }
 /* message > username */
 span.rcx-box.rcx-box--full.rcx-message-header__username {
@@ -443,9 +449,6 @@ ul.messages-list > .rcx-message[data-own=true]:after {
 	left: unset;
 	right: 0;
 	transform: translateX(-5.5em) translateY(0.6rem);
-}
-ul.messages-list > .rcx-message:before {
-	box-shadow: 2px 2px 2px 0px #00000021;
 }
 
 /* blockquote (current user blockquote) */
@@ -842,10 +845,9 @@ div.sidebar-folder-container {
 	display: none;
 	position: relative;
 	width: 100%;
-	height: 100%;
-	/*background-color: #333;*/
+	/* height: 100%; */
 	overflow: scroll;
-		margin-top: 3px;
+	margin-top: 3px;
 }
 div.sidebar-folder {
 		width: 70px;
@@ -881,7 +883,7 @@ div.sidebar-folder p {
 div.sidebar-folder:hover .folder-svg-icon {
 	color: #5d6265;
 }
-span.unreaded-chats-counter {
+span.unread-chats-counter {
 	position: absolute;
 	z-index: 10;
 	width: 24px;
@@ -893,7 +895,8 @@ span.unreaded-chats-counter {
 	border-radius: 50%;
 	font-size: 10px;
 	color: aliceblue;
-	display: flex;
+	display: none;
+	/* display: flex; */
 	justify-content: center;
 	align-items: center;
 	font-weight: bold;
@@ -901,7 +904,7 @@ span.unreaded-chats-counter {
 	letter-spacing: -1px;
 	border: 3px solid #31363f;
 }
-div.sidebar-folder.folder-selected span.unreaded-chats-counter {
+div.sidebar-folder.folder-selected span.unread-chats-counter {
 		border: 3px solid #434c53;
 }
 

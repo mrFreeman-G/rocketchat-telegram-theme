@@ -1,57 +1,40 @@
-window.addEventListener("DOMContentLoaded", start);
+// local use (user from browser extension)
+const isLocal = true; // false
+// chexbox of Read Receipt status (paid version option of rocketchat)
+const messageReadReceiptEnabled = true;
+
+
+if (isLocal) {
+	// for browser use.
+	// local user must wait until DOM loaded.
+  window.addEventListener("DOMContentLoaded", start);
+} else {
+	// for server use.
+	// server loads JS in already loaded DOM.
+  start();
+}
+console.log(' --- CUSTOM JS LOADED --- ');
 
 
 const root = document.documentElement;
-const folders = {
-	"HR_DEV": [
-		"HR Tech Bots",
-		"HR-Tech: Leads",
-		"HR-Tech: Releases",
-		"HR-Tech: Dev",
-		"HR-Tech: Core",
-		"HR-Tech: Backend",
-		"HR-Tech: Развитие и целеполагание",
-	],
-	"HR_etc": [
-		"HR-Tech: Интеграции",
-		"HR-Tech: Руководитель",
-		"HR-Tech: Сотрудник",
-		"HR-Tech: Моделирование ШР",
-		"HR-Tech: Support",
-		"HR-Tech: News",
-		"HR-Tech: Offtopic",
-		"HR-Tech: 1C",
-		"HR-Tech",
-	],
-	"DEVOPS": [
-		"Platform_RE",
-		"Platform_Kafka",
-		"Platform_Monitoring",
-		"Platform",
-		"Platform_News",
-		"Platform_Infra",
-		"New_Kafka_HRD",
-		"Postgres",
-		"10D-DevOps-channel",
-	],
-	"Samolet": [
-		"community-python",
-	],
-	"test": [
-		"10D-DevOps-channel",
-	],
-};
+let loaderTimeout;
 const preparedFolders = {};
-const generalFolderUnreadedChats = {};
+const generalFolderUnreadChats = {};
 const chatFolders = getLocalStorageChatFolders();
 
 
+function delay(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function isElement(element) {
+  return element instanceof Element || element instanceof Document;
+}
+
 function getLocalStorageChatFolders() {
 	let chatFolders = JSON.parse(localStorage.getItem("chatFolders"));
-	// chatFolders = null;
 	if (!chatFolders) {
 		chatFolders = {};
-		// chatFolders = folders;
 		localStorage.setItem("chatFolders", JSON.stringify(chatFolders));
 	}
 	return chatFolders;
@@ -93,6 +76,29 @@ function removeChatFromLocalStorageChatFolder(folderName, chatName) {
 	return false;
 }
 
+function getFolderIconSvg() {
+  const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const iconPath = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+  );
+  iconSvg.classList.add("folder-svg-icon");
+  iconSvg.setAttribute("width", "100px");
+  iconSvg.setAttribute("height", "100px");
+  iconSvg.setAttribute("fill", "currentColor");
+  iconSvg.setAttribute("viewBox", "0 0 24 24");
+  iconPath.setAttribute(
+    "d",
+    "M3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17Z"
+  );
+  // iconPath.setAttribute("stroke", "#000000");
+  iconPath.setAttribute("stroke", "none");
+  iconPath.setAttribute("stroke-linecap", "round");
+  iconPath.setAttribute("stroke-linejoin", "round");
+  iconSvg.appendChild(iconPath);
+  return iconSvg;
+}
+
 
 function handlePopups() {
 	window.addEventListener("click", ({ target }) => {
@@ -103,35 +109,6 @@ function handlePopups() {
 			if (popup != p) p.classList.remove("show");
 		});
 	});
-}
-
-
-function delay(time) {
-	return new Promise((resolve) => setTimeout(resolve, time));
-}
-
-
-function getIconSvg() {
-	const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	const iconPath = document.createElementNS(
-		"http://www.w3.org/2000/svg",
-		"path"
-	);
-	iconSvg.classList.add("folder-svg-icon");
-	iconSvg.setAttribute("width", "100px");
-	iconSvg.setAttribute("height", "100px");
-	iconSvg.setAttribute("fill", "currentColor");
-	iconSvg.setAttribute("viewBox", "0 0 24 24");
-	iconPath.setAttribute(
-		"d",
-		"M3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17Z"
-	);
-	// iconPath.setAttribute("stroke", "#000000");
-	iconPath.setAttribute("stroke", "none");
-	iconPath.setAttribute("stroke-linecap", "round");
-	iconPath.setAttribute("stroke-linejoin", "round");
-	iconSvg.appendChild(iconPath);
-	return iconSvg;
 }
 
 
@@ -201,9 +178,9 @@ function setupFolder(foldersContainer, folderName) {
 	const folderDiv = document.createElement("div");
 	const folderNameP = document.createElement("p");
 	const folderUnreadedChatsCounter = document.createElement("span");
-	folderUnreadedChatsCounter.className = "unreaded-chats-counter";
+	folderUnreadedChatsCounter.className = "unread-chats-counter";
 
-	const iconSvg = getIconSvg();
+	const iconSvg = getFolderIconSvg();
 	folderDiv.appendChild(iconSvg);
 
 	folderNameP.innerHTML = folderName;
@@ -281,7 +258,7 @@ function setupAddFolderButton(navbarItemsContainer, foldersContainer) {
 
 
 /*
-	MANAGE FOLDER BUTTONS
+	FOLDER MANAGE BUTTONS
 */
 function removeFolder(folderName) {
 	removeLocalStorageChatFolder(folderName);
@@ -311,7 +288,7 @@ function removeChatFromFolder(FolderName, chatName) {
 	}
 }
 
-function setupManageFolderButtons() {
+function setupFolderManageButtons() {
 	const manageFolderDiv = document.createElement("div");
 	manageFolderDiv.className = "manage-folder-buttons ";
 	const addCurrentChatButton = document.createElement("button");
@@ -353,8 +330,33 @@ function setupManageFolderButtons() {
 	return manageFolderDiv;
 }
 /*
-	/MANAGE FOLDER BUTTONS
+	/ FOLDER MANAGE BUTTONS
 */
+
+
+function chatsUnreadStatusDataDivSetup() {
+  let chatsUnreadStatusDataDiv = document.createElement("div");
+  chatsUnreadStatusDataDiv.className = "chats-unread-status-data";
+  chatsUnreadStatusDataDiv.style.display = "none";
+  document.body.appendChild(chatsUnreadStatusDataDiv);
+
+  let observer = new MutationObserver(function (mutations) {
+    if (generalFolderUnreadChats) {
+      let unreadChats = Object.values(generalFolderUnreadChats).filter((v) => v === true).length;
+
+      // set counter
+      let folderName = "all";
+      let folderBadge = document.querySelector(`div[folder-label="${folderName}"] span.unread-chats-counter`);
+      if (unreadChats == 0) {
+        folderBadge.style.display = "none";
+      } else {
+        folderBadge.style.display = "flex";
+        folderBadge.innerHTML = unreadChats;
+      }
+    }
+  });
+  observer.observe(chatsUnreadStatusDataDiv, { attributes: true, childList: true, characterData: true, subtree: true });
+}
 
 
 function setupFolderArea(navbarItemsContainer, folderName, items) {
@@ -371,86 +373,22 @@ function setupFolderArea(navbarItemsContainer, folderName, items) {
 	}
 	folderItemsContainer.innerHTML = html;
 
-	let manageFolderDiv = setupManageFolderButtons();
+	let manageFolderDiv = setupFolderManageButtons();
 	folderItemsContainer.prepend(manageFolderDiv);
 
 	navbarItemsContainerParent.append(folderItemsContainer);
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TODO: refactoring
-
-let chatsUnreadStatusDataDiv = document.createElement("div");
-chatsUnreadStatusDataDiv.className = "chats-unread-status-data";
-chatsUnreadStatusDataDiv.style.display = "none";
-document.body.appendChild(chatsUnreadStatusDataDiv);
-
-let observer = new MutationObserver(function (mutations) {
-	let chatsUnreadStatusData = generalFolderUnreadedChats;
-	// let chatsUnreadStatusData = getLocalStorageChatsUnreadStatus();
-	if (chatsUnreadStatusData) {
-		let unreadChats = Object.values(chatsUnreadStatusData).filter((v) => v === true).length;
-
-		// set counter
-		let folderName = "all";
-		let folderBadge = document.querySelector(`div[folder-label="${folderName}"] span.unreaded-chats-counter`);
-		if (unreadChats == 0) {
-			folderBadge.style.display = "none";
-		} else {
-			folderBadge.style.display = "flex";
-			folderBadge.innerHTML = unreadChats;
-		}
-
-	}
-});
-observer.observe(chatsUnreadStatusDataDiv, { attributes: true, childList: true, characterData: true, subtree: true });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+async function setupChatsLoader() {
+  // setup chats loader (on chats switch).
+  const loaderDiv = document.createElement("div");
+  loaderDiv.className = "chat-area-loader";
+  loaderDiv.innerHTML = "<div class='chat-loader'></div>";
+  await delay(1000);
+  const mainContainer = document.querySelector("main.rcx-box--full");
+  mainContainer.before(loaderDiv);
+}
 
 
 function formatExtendedNavbarItems(item) {
@@ -464,11 +402,14 @@ function formatExtendedNavbarItems(item) {
 	if (isChat) {
 		let chatLabel = item.querySelector("[aria-label]").getAttribute("aria-label");
 		if (isHighlighted.length) {
-			generalFolderUnreadedChats[chatLabel] = true;
+			generalFolderUnreadChats[chatLabel] = true;
 		} else {
-			generalFolderUnreadedChats[chatLabel] = false;
+			generalFolderUnreadChats[chatLabel] = false;
 		}
-		chatsUnreadStatusDataDiv.innerHTML = JSON.stringify(generalFolderUnreadedChats);
+		let chatsUnreadStatusDataDiv = document.querySelector(".chats-unread-status-data");
+		if (chatsUnreadStatusDataDiv) {
+			chatsUnreadStatusDataDiv.innerHTML = JSON.stringify(generalFolderUnreadChats);
+		}
 	}
 
 	let messageSpan = item.querySelector("span.message-body--unstyled");
@@ -494,6 +435,85 @@ function formatExtendedNavbarItems(item) {
 }
 
 
+function formatStickerMessages() {
+	let notFormattedStickerMessages = document.querySelectorAll(".rcx-message:not(.is-sticker-message)");
+	notFormattedStickerMessages.forEach(message => {
+		let isSequential = Array.from(message.classList).includes("rcx-message--sequential");
+		let messageContainer = message.querySelector(".rcx-message-container:not(.rcx-message-container--left)");
+		if (!messageContainer) return;
+		let messageBody = messageContainer.querySelector(".rcx-message-body");
+		if (!messageBody) return;
+		let messageEmoji = messageBody.querySelectorAll(".rcx-message__emoji");
+		if (!messageEmoji) return;
+		let withReactions = !!messageContainer.querySelector(".rcx-message-reactions__container") ? 1 : 0;
+		let withThread = !!messageContainer.querySelector(".rcx-message-metrics__content-item") ? 1 : 0;
+		let withMessageReadReceipt = messageReadReceiptEnabled ? 1 : 0;
+
+		const childElementByCondition = {
+			// if messageReadReceiptEnabled is true -> messageContainer has different child elements count (+1)
+			// if withThread -> messageContainer has different child elements count (+1)
+			// if withReactions -> messageContainer has different child elements count (+1)
+			cond_1: 1 + withReactions + withThread + withMessageReadReceipt,
+			cond_2: 2 + withReactions + withThread + withMessageReadReceipt,
+			cond_3: 2 + withReactions + withThread + withMessageReadReceipt,
+			cond_4: 3 + withReactions + withThread + withMessageReadReceipt,
+		};
+		if (
+			(
+				// in sequential
+				isSequential && messageContainer.childElementCount === childElementByCondition["cond_1"]
+				// in sequential with reactions
+				|| isSequential && withReactions && messageContainer.childElementCount === childElementByCondition["cond_2"]
+
+				// in NOT sequential
+				|| !isSequential && messageContainer.childElementCount === childElementByCondition["cond_3"]
+				// in NOT sequential with reactions
+				|| !isSequential && withReactions && messageContainer.childElementCount === childElementByCondition["cond_4"]
+			)
+			&& messageBody.childElementCount === 1
+			&& messageEmoji.length === 1
+		) {
+			let messageText = messageBody.innerText;
+			let emojiText = messageEmoji[0].innerText;
+			let isOnlyEmoji = messageText.replace(emojiText, "");
+			if (!isOnlyEmoji.length) message.classList.add("is-sticker-message");
+		}
+	});
+}
+
+
+function handleChatLoader() {
+	let loaderDiv = document.querySelector(".chat-area-loader");
+	let mainContainerCurrent = document.querySelector("main.rcx-box--full");
+	if (mainContainerCurrent) {
+		let roomIsLoaded = mainContainerCurrent.getAttribute("data-qa-rc-room");
+		let isHomePage = mainContainerCurrent.getAttribute("data-qa");
+		if (roomIsLoaded) {
+			if (!loaderTimeout)
+				loaderTimeout = setTimeout(() => {
+					// wait for load (hide ugly skeleton)
+					// TODO: watch DOM instead of timeout
+					loaderDiv.style.display = "none";
+					loaderTimeout = null;
+				}, 1000);
+		} else if (isHomePage) {
+			loaderDiv.style.display = "none";
+		} else {
+			loaderDiv.style.display = "block";
+		}
+	}
+}
+
+
+function loaderAndStickersHandler() {
+	let bodyObserver = new MutationObserver(function (mutations) {
+		formatStickerMessages();
+		handleChatLoader();
+	});
+	bodyObserver.observe(document.body, { attributes: true, childList: true, characterData: true, subtree: true });
+}
+
+
 async function setupNavbar(navbarItemsContainer) {
 	navbarItemsContainer.setAttribute("folder-label-area", "all");
 
@@ -507,11 +527,14 @@ async function setupNavbar(navbarItemsContainer) {
 	}
 
 	// setup folders sidebar container
-	const channelsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
+	const chatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
 	// const channelsContainer = document.querySelector("nav.rcx-sidebar div[aria-label='Каналы']");
+	const foldersIsReady = chatsContainer.querySelector(".sidebar-folders");
+	if (foldersIsReady) return;
+
 	const foldersContainer = document.createElement("div");
 	foldersContainer.classList.add("sidebar-folders");
-	channelsContainer.prepend(foldersContainer);
+	chatsContainer.prepend(foldersContainer);
 
 	// setup items
 	const navbarItems = await parseNavbarItems(navbarItemsContainer);
@@ -521,7 +544,6 @@ async function setupNavbar(navbarItemsContainer) {
 			let elemDataAttr = item.firstChild.getAttribute("aria-label");
 			if (itemLabels.includes(elemDataAttr)) {
 				preparedFolders[folderName].push(item.cloneNode(true));
-				// preparedFolders[folderName].push(item);
 			}
 		}
 	}
@@ -534,83 +556,8 @@ async function setupNavbar(navbarItemsContainer) {
 	// setup "all" folder.
 	setupFolder(foldersContainer, "all");
 	navbarItems.forEach((element) => { formatExtendedNavbarItems(element) });
+	// setup "add folder" button
 	setupAddFolderButton(navbarItemsContainer, foldersContainer);
-
-
-
-
-
-	// setup chats loader (on chats switch).
-	const mainContainer = document.querySelector("main.rcx-box--full");
-	const loaderDiv = document.createElement("div");
-	loaderDiv.className = "chat-area-loader";
-	loaderDiv.innerHTML = "<div class='chat-loader'></div>";
-  mainContainer.before(loaderDiv);
-
-	let timeout;
-	let loaderObserver = new MutationObserver(function (mutations) {
-
-
-
-		let mainContainerCurrent = document.querySelector("main.rcx-box--full");
-		if (mainContainerCurrent) {
-			let roomIsLoaded = mainContainerCurrent.getAttribute("data-qa-rc-room");
-			if (roomIsLoaded) {
-				if (!timeout)
-					timeout = setTimeout(() => {
-						// wait for load (hide ugly skeleton)
-						// TODO: watch DOM instead of timeout
-						loaderDiv.style.display = "none";
-						timeout = null;
-					}, 1000);
-			} else {
-				loaderDiv.style.display = "block";
-			}
-		}
-
-
-
-
-		let notFormattedStickerMessages = document.querySelectorAll(".rcx-message:not(.is-sticker-message)");
-		notFormattedStickerMessages.forEach(message => {
-			let isSequential = Array.from(message.classList).includes("rcx-message--sequential");
-			let messageBodyContainer = message.querySelector(".rcx-message-container:not(.rcx-message-container--left)");
-			if (!messageBodyContainer) return;
-			let messageBody = messageBodyContainer.querySelector(".rcx-message-body");
-			if (!messageBody) return;
-			let messageEmoji = messageBody.querySelectorAll(".rcx-message__emoji");
-			if (!messageEmoji) return;
-			let withReactions = messageBodyContainer.querySelector(".rcx-message-reactions__container");
-			if (
-				(
-					// при последовательных всего 2 блока
-					isSequential && messageBodyContainer.childElementCount === 2
-					// при последовательных с реакциями всего 3 блока
-					|| isSequential && withReactions && messageBodyContainer.childElementCount === 3
-					// при НЕ последовательных всего 3 блока
-					|| !isSequential && messageBodyContainer.childElementCount === 3
-					// при НЕ последовательных с реакциями всего 4 блока
-					|| !isSequential&& withReactions && messageBodyContainer.childElementCount === 4
-				)
-				&& messageBody.childElementCount === 1
-				&& messageEmoji.length === 1
-			) {
-
-				let messageText = messageBody.innerText;
-				let emojiText = messageEmoji[0].innerText;
-				let isOnlyEmoji = messageText.replace(emojiText, "");
-				if (!isOnlyEmoji.length) message.classList.add("is-sticker-message");
-				// if (!isOnlyEmoji.length) messageBodyContainer.firstChild.remove();
-			}
-		});
-
-
-
-
-	});
-	loaderObserver.observe(document.body, { attributes: true, childList: true, characterData: true, subtree: true });
-
-
 }
 
 
@@ -630,7 +577,7 @@ function countFolderUnreadedChats(folderContainer, isGeneralFolder) {
 
 	// set counter
 	let folderName = isGeneralFolder ? "all" : folderContainer.getAttribute("folder-label-area");
-	let folderBadge = document.querySelector(`div[folder-label="${folderName}"] span.unreaded-chats-counter`);
+	let folderBadge = document.querySelector(`div[folder-label="${folderName}"] span.unread-chats-counter`);
 	if (folderUnreadedChats == 0) {
 		folderBadge.style.display = "none";
 	} else {
@@ -666,7 +613,7 @@ function countFolderUnreadedChatsInitial(navbarItemsContainer) {
 	});
 
 	for (let [folderName, unreadedChatsCount] of Object.entries(foldersUnreadedChatsCount)) {
-		let folderBadge = document.querySelector(`div.sidebar-folder[folder-label="${folderName}"] span.unreaded-chats-counter`);
+		let folderBadge = document.querySelector(`div.sidebar-folder[folder-label="${folderName}"] span.unread-chats-counter`);
 		if (unreadedChatsCount == 0) {
 			folderBadge.style.display = "none";
 		} else {
@@ -679,7 +626,7 @@ function countFolderUnreadedChatsInitial(navbarItemsContainer) {
 
 
 function syncNavbarItemsToFoldes(mutation) {
-	if (!mutation.target) return;
+	if (!mutation.target || !isElement(mutation.target)) return;
 	let sourceElem = mutation.target.closest("div[data-index]");
 	if (!sourceElem && (mutation.type == "childList" && mutation.addedNodes.length > 0)) {
 		sourceElem = mutation.addedNodes[0].closest("div[data-index]");
@@ -701,10 +648,9 @@ function syncNavbarItemsToFoldes(mutation) {
 
 
 function startObserveNavbarItems(navbarItemsContainer) {
-	// console.log(`navbarItemsContainer - `, navbarItemsContainer);
 	let observer = new MutationObserver(function (mutations) {
 		// console.log("observer.takeRecords() - ", observer.takeRecords());
-		// countFolderUnreadedChatsInitial(navbarItemsContainer); // FIXME: observe на каждую папку отдельно!
+		// countFolderUnreadedChatsInitial(navbarItemsContainer); // FIXME: observe на каждую папку отдельно
 		mutations.forEach(function (mutation) {
 			syncNavbarItemsToFoldes(mutation);
 		});
@@ -844,7 +790,10 @@ async function start() {
 				// reactDOM loaded
 				clearInterval(onLoadInterval);
 
+				chatsUnreadStatusDataDivSetup();
 				await setupNavbar(navbarItemsContainer);
+				await setupChatsLoader();
+				loaderAndStickersHandler();
 				startObserveNavbarItems(navbarItemsContainer);
 				countFolderUnreadedChatsInitial(navbarItemsContainer);
 				startObserveMainPalette();
