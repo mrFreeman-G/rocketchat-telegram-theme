@@ -41,7 +41,7 @@
 ### Hot ot install:
 #### for user:
 - install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
-- click on extension icon in your browser
+- click on extension icon in your browser when you in rockerchat tab
 - click "add"
 - copy/past js and css code from repository into sections
 - in js code change `isLocal` variable to `true`
