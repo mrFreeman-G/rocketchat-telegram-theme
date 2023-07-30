@@ -56,29 +56,29 @@
 
 
 `messageReadReceiptEnabled` - it's a checkbox in messages:
-![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/39b3968c-0c71-4db2-b83c-e36c19cee5fa)
+![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9a5a0669-cdaa-4226-9c7d-c3d19ef41026)
 
 for administrator this option can be found in `Workspace > Settings > Message > Read Receipts`: 
-![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/67c3d7b1-222e-4178-9932-c56ce260d657)
+![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/0bd5f727-55f1-40d7-bc4d-3df3bc0bbde6)
 
 
 
 ## Previews
 
 ### thread's
-![thread_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/3e58b8ed-fe20-499a-b9b8-23e7b3a7a323)
-![thread_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/71cd8742-0b56-46cf-8c7b-8cad2d3ae9bc)
+![thread_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/802babaa-011f-4205-b24a-f89876331f78)
+![thread_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/d722b9ab-2563-46e0-9386-af19719c515a)
 
 ### poll's
-![poll_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/7e86703a-e975-4185-b47f-6d3583baa24f)
+![poll_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/26b08131-6860-4d56-87ac-5b390164f52c)
 
 ### chat room / messages
-![main_with_thread_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/6383c447-4182-461f-90a2-d146ad56740e)
-![main_with_thread_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/00425d99-1b2e-48ab-94ea-9b7fb99c4bf6)
+![main_with_thread_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/19da027f-9179-470c-8f24-bc721287ae89)
+![main_with_thread_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/155e627c-764e-4f37-95a7-37213243078f)
 
 ### stickers
-![stickers_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/fd302e2a-f9ab-4d36-8d9e-11fb776a1dfc)
-![stickers_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/3fa39a90-782f-4a54-affb-54463a3700ae)
+![stickers_-_light](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/99ab2c1a-992e-49b7-a5f1-44b0f21c442d)
+![stickers_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/cadb7abb-2363-42a7-9706-1cd7da0c86dd)
 
 ### sidebar
 - 1 - add folder 
@@ -86,4 +86,5 @@ for administrator this option can be found in `Workspace > Settings > Message > 
 - 3 - remove current chat from folder
 - 4 - remove folder from sidebar
   
-![sidebar](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/208fe57c-2e50-43ec-95c6-cc85b048dda0)
+![sidebar](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/7d00ef0a-0fbe-4306-a4ec-8305b7a88764)
+
