@@ -1,3 +1,4 @@
+
 # Telegram theme for Rocketchat
 > "Is it telegram?! No it's rocketchat :("
 --
@@ -37,8 +38,29 @@
  - [ ] no adaptation on narrow screen size (WIP)
  - [ ] there may be problems with a slower Internet connection (WIP)
 
-### WIP:
- - [ ] server side theme install
+### Hot ot install:
+#### for user:
+- install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- click on extension icon in your browser
+- click "add"
+- copy/past js and css code from repository into sections
+- in js code change `isLocal` variable to `true`
+- in js code change `messageReadReceiptEnabled` variable to `true` or `false` if it's enabled on your server (required for correct work of stickers)
+- save & reload rocketchat window
+#### for server:
+- go to `Workspace > Settings > Layout`
+- copy/paste css code into `Custom CSS` section
+- copy/paste js code into `Custom Scripts > Custom Script for Logged In Users`
+- in js code change `isLocal` variable to `false`
+- in js code change `messageReadReceiptEnabled` variable to `true` or `false` if it's enabled on your server (required for correct work of stickers)
+
+
+`messageReadReceiptEnabled` - it's a checkbox in messages:
+![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/39b3968c-0c71-4db2-b83c-e36c19cee5fa)
+
+for administrator this option can be found in `Workspace > Settings > Message > Read Receipts`: 
+![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/67c3d7b1-222e-4178-9932-c56ce260d657)
+
 
 
 ## Previews
