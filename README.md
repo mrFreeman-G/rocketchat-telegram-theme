@@ -26,7 +26,7 @@
  - [x] message formatting on extended view (coloring author)
 - **Char room / Chat messages**
  - [x] new messages / threads style
- - [x] system messages removed
+ - [x] system messages style
  - [x] chat room leader in header removed
  - [x] last message in thread removed (in general messages list)
  - [x] messages formatted (useless information removed)
