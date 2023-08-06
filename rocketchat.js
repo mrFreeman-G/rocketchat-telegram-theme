@@ -1,17 +1,15 @@
 // local use (user from browser extension)
 const isLocal = true; // false
-// chexbox of Read Receipt status (paid version option of rocketchat)
-const messageReadReceiptEnabled = true;
 
 
 if (isLocal) {
 	// for browser use.
 	// local user must wait until DOM loaded.
-  window.addEventListener("DOMContentLoaded", start);
+	window.addEventListener("DOMContentLoaded", start);
 } else {
 	// for server use.
 	// server loads JS in already loaded DOM.
-  start();
+	start();
 }
 console.log(' --- CUSTOM JS LOADED --- ');
 
@@ -179,6 +177,7 @@ function setupFolder(foldersContainer, folderName) {
 	const folderNameP = document.createElement("p");
 	const folderUnreadedChatsCounter = document.createElement("span");
 	folderUnreadedChatsCounter.className = "unread-chats-counter";
+	if (folderName == "all") folderUnreadedChatsCounter.classList.add("all");
 
 	const iconSvg = getFolderIconSvg();
 	folderDiv.appendChild(iconSvg);
@@ -447,10 +446,10 @@ function formatStickerMessages() {
 		if (!messageEmoji) return;
 		let withReactions = !!messageContainer.querySelector(".rcx-message-reactions__container") ? 1 : 0;
 		let withThread = !!messageContainer.querySelector(".rcx-message-metrics__content-item") ? 1 : 0;
-		let withMessageReadReceipt = messageReadReceiptEnabled ? 1 : 0;
+		let withMessageReadReceipt = !!messageContainer.querySelector("i.rcx-icon--name-check") ? 1 : 0;
 
 		const childElementByCondition = {
-			// if messageReadReceiptEnabled is true -> messageContainer has different child elements count (+1)
+			// if withMessageReadReceipt -> messageContainer has different child elements count (+1)
 			// if withThread -> messageContainer has different child elements count (+1)
 			// if withReactions -> messageContainer has different child elements count (+1)
 			cond_1: 1 + withReactions + withThread + withMessageReadReceipt,
@@ -668,100 +667,12 @@ function startObserveFolderItems(folderItemsContainer, isGeneralFolder) {
 
 
 function matchPallete(paletteElem) {
-	let bgGradientMainLight = getComputedStyle(root).getPropertyValue("--bg-gradient-light");
-	let bgGradientMainDark = getComputedStyle(root).getPropertyValue("--bg-gradient-dark");
-
-	let bgGradientThreadLight = getComputedStyle(root).getPropertyValue("--bg-gradient-thread-light");
-	let bgGradientThreadDark = getComputedStyle(root).getPropertyValue("--bg-gradient-thread-dark");
-
-	let metricsBgColorLight = getComputedStyle(root).getPropertyValue("--metrics-bg-color-light");
-	let metricsBgColorDark = getComputedStyle(root).getPropertyValue("--metrics-bg-color-dark");
-
-	let messageBgColorMineLight = getComputedStyle(root).getPropertyValue("--message-bg-color-mine-light");
-	let messageBgColorMineDark = getComputedStyle(root).getPropertyValue("--message-bg-color-mine-dark");
-
-	let messageBgColorThreadMineLight = getComputedStyle(root).getPropertyValue("--message-bg-color-thread-mine-light");
-	let messageBgColorThreadMineDark = getComputedStyle(root).getPropertyValue("--message-bg-color-thread-mine-dark");
-
-	let reactionMineBgColorLight = getComputedStyle(root).getPropertyValue("--reaction-mine-bg-color-light");
-	let reactionMineBgColorDark = getComputedStyle(root).getPropertyValue("--reaction-mine-bg-color-dark");
-
-	let mentionBgColorLight = getComputedStyle(root).getPropertyValue("--mention-bg-color-light");
-	let mentionBgColorDark = getComputedStyle(root).getPropertyValue("--mention-bg-color-dark");
-
-	let mentionMeBgColorLight = getComputedStyle(root).getPropertyValue("--mention-me-bg-color-light");
-	let mentionMeBgColorDark = getComputedStyle(root).getPropertyValue("--mention-me-bg-color-dark");
-
-	let mentionFontColorLight = getComputedStyle(root).getPropertyValue("--mention-color-light");
-	let mentionFontColorDark = getComputedStyle(root).getPropertyValue("--mention-color-dark");
-
-	let mentionMeFontColorLight = getComputedStyle(root).getPropertyValue("--mention-me-color-light");
-	let mentionMeFontColorDark = getComputedStyle(root).getPropertyValue("--mention-me-color-dark");
-
-	let quoteBgColorLight = getComputedStyle(root).getPropertyValue("--quote-bg-color-light");
-	let quoteBgColorDark = getComputedStyle(root).getPropertyValue("--quote-bg-color-dark");
-
-	let quoteBgColorMineLight = getComputedStyle(root).getPropertyValue("--quote-bg-color-mine-light");
-	let quoteBgColorMineDark = getComputedStyle(root).getPropertyValue("--quote-bg-color-mine-dark");
-
-	let quoteBorderColorLight = getComputedStyle(root).getPropertyValue("--quote-border-color-light");
-	let quoteBorderColorDark = getComputedStyle(root).getPropertyValue("--quote-border-color-dark");
-
-	let buttonBgColorLight = getComputedStyle(root).getPropertyValue("--button-bg-color-light");
-	let buttonBgColorDark = getComputedStyle(root).getPropertyValue("--button-bg-color-dark");
-
-	let linkColorLight = getComputedStyle(root).getPropertyValue("--link-color-light");
-	let linkColorDark = getComputedStyle(root).getPropertyValue("--link-color-dark");
-
-	let announcementBgColorLight = getComputedStyle(root).getPropertyValue("--announcement-bg-color-light");
-	let announcementBgColorDark = getComputedStyle(root).getPropertyValue("--announcement-bg-color-dark");
-
-	let charHighlightedColorLight = getComputedStyle(root).getPropertyValue("--chat-box-shadow-highlighted-color-light");
-	let charHighlightedColorDark = getComputedStyle(root).getPropertyValue("--chat-box-shadow-highlighted-color-dark");
-
-	let messagesFontColorLight = getComputedStyle(root).getPropertyValue("--messages-font-color-light");
-	let messagesFontColorDark = getComputedStyle(root).getPropertyValue("--messages-font-color-dark");
-
 	if (paletteElem && paletteElem.innerHTML.length > 200) {
 		// dark theme
-		root.style.setProperty("--bg-gradient-main", bgGradientMainDark);
-		root.style.setProperty("--bg-gradient-thread-main", bgGradientThreadDark);
-		root.style.setProperty("--metrics-bg-color-main", metricsBgColorDark);
-		root.style.setProperty("--message-bg-color-mine-main", messageBgColorMineDark);
-		root.style.setProperty("--message-bg-color-thread-mine-main", messageBgColorThreadMineDark);
-		root.style.setProperty("--reaction-mine-bg-color-main", reactionMineBgColorDark);
-		root.style.setProperty("--mention-bg-color-main", mentionBgColorDark);
-		root.style.setProperty("--mention-me-bg-color-main", mentionMeBgColorDark);
-		root.style.setProperty("--mention-color-main", mentionFontColorDark);
-		root.style.setProperty("--mention-me-color-main", mentionMeFontColorDark);
-		root.style.setProperty("--quote-bg-color-main", quoteBgColorDark);
-		root.style.setProperty("--quote-bg-color-mine-main", quoteBgColorMineDark);
-		root.style.setProperty("--quote-border-color-main", quoteBorderColorDark);
-		root.style.setProperty("--button-bg-color-main", buttonBgColorDark);
-		root.style.setProperty("--link-color-main", linkColorDark);
-		root.style.setProperty("--announcement-bg-color-main", announcementBgColorDark);
-		root.style.setProperty("--chat-box-shadow-highlighted-color-main", charHighlightedColorDark);
-		root.style.setProperty("--messages-font-color-main", messagesFontColorDark);
+		root.classList.add("dark-theme");
 	} else {
 		// light theme
-		root.style.setProperty("--bg-gradient-main", bgGradientMainLight);
-		root.style.setProperty("--bg-gradient-thread-main", bgGradientThreadLight);
-		root.style.setProperty("--metrics-bg-color-main", metricsBgColorLight);
-		root.style.setProperty("--message-bg-color-mine-main", messageBgColorMineLight);
-		root.style.setProperty("--message-bg-color-thread-mine-main", messageBgColorThreadMineLight);
-		root.style.setProperty("--reaction-mine-bg-color-main", reactionMineBgColorLight);
-		root.style.setProperty("--mention-bg-color-main", mentionBgColorLight);
-		root.style.setProperty("--mention-me-bg-color-main", mentionMeBgColorLight);
-		root.style.setProperty("--mention-color-main", mentionFontColorLight);
-		root.style.setProperty("--mention-me-color-main", mentionMeFontColorLight);
-		root.style.setProperty("--quote-bg-color-main", quoteBgColorLight);
-		root.style.setProperty("--quote-bg-color-mine-main", quoteBgColorMineLight);
-		root.style.setProperty("--quote-border-color-main", quoteBorderColorLight);
-		root.style.setProperty("--button-bg-color-main", buttonBgColorLight);
-		root.style.setProperty("--link-color-main", linkColorLight);
-		root.style.setProperty("--announcement-bg-color-main", announcementBgColorLight);
-		root.style.setProperty("--chat-box-shadow-highlighted-color-main", charHighlightedColorLight);
-		root.style.setProperty("--messages-font-color-main", messagesFontColorLight);
+		root.classList.remove("dark-theme");
 	}
 }
 
