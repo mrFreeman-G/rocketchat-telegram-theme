@@ -9,7 +9,7 @@
 
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
 
-- JS and CSS code was developed from user position (when you dont have permissions to change css and js on server side), so to make this works you need to install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- If you dont have permissions to change css and js on server side, you can use Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) to use theme in your browser
 - works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.2.11)
 
 ### Current features:
