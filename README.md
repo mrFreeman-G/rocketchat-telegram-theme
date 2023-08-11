@@ -16,6 +16,11 @@
 - **General telegram themes**
  - [x] light
  - [x] dark
+- **Theme settings**
+ - [x] switch to `default` RocketChat theme
+ - [ ] switch to `Flat` theme (WIP)
+ - [x] switch to `Telegram` theme
+ - [x] color palette variations
 - **Chat folders**
  - [x] add / remove folder
  - [x] add / remove chat in folder
