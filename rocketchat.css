@@ -16,6 +16,7 @@
 	/* -- styles for tg background */
 	--bg-gradient-light-tg: linear-gradient(327deg, #d4b65ff5 -15%, #68b58cf2 50%, #d8f7b2f2 135%);
 	--bg-gradient-dark-tg: linear-gradient(327deg, hsl(251deg 25% 31% / 81%) -15%, hsl(196deg 26% 21% / 81%) 50%, hsl(276deg 21% 31% / 89%) 135%);
+	--bg-gradient-darker-tg: linear-gradient(327deg, hsl(217deg 45% 15% / 81%) -15%, hsl(203deg 13% 14% / 81%) 50%, hsl(258deg 21% 20% / 89%) 135%);
 	--bg-gradient-main-tg: var(--bg-gradient-light-tg);
 	/* /-- styles for tg background */
 
@@ -100,7 +101,8 @@
 	--messages-font-color-dark: #c2c6ca;
 	--messages-font-color-main: var(--messages-font-color-light);
 
-	--folder-icon-color: #5d6265;
+	--folder-icon-color: #727a83;
+	--folder-icon-color-selected: #4599db;
 	--folder-background: #262931;
 	--folder-background-selected: #262931;
 }
@@ -126,6 +128,42 @@
 	--messages-font-color-main: var(--messages-font-color-dark);
 }
 
+html[data-bg="bg-1"] {
+	--bg-image-tg-1: url(https://t.me/bg/aHrFIr08CFILAAAAkrBxhl8fIIs?pattern_file=1);
+}
+html[data-bg="bg-2"] {
+	--bg-image-tg-1: var(--bg-image-8);
+}
+html[data-bg="bg-3"] {
+	--bg-image-tg-1: var(--bg-image-7);
+}
+html[data-bg="bg-4"] {
+	--bg-image-tg-1: var(--bg-image-6);
+}
+html[data-pallete-light="pallete-green"] {
+	--bg-gradient-light: var(--bg-gradient-light-green);
+	--message-bg-color-mine-light: #edfedf;
+}
+html[data-pallete-light="pallete-blue"] {
+	--bg-gradient-light: var(--bg-gradient-light-blue);
+	--message-bg-color-mine-light: #dff3fe;
+}
+html[data-pallete-dark="pallete-dark"] {
+	--bg-gradient-dark: var(--bg-gradient-dark-tg);
+}
+html[data-pallete-dark="pallete-darker"] {
+	--bg-gradient-dark: var(--bg-gradient-darker-tg);
+
+}
+
+/*
+html[data-theme="telegram"]
+html[data-bg="bg-1"]
+html[data-pallete-light="pallete-2"]
+html[data-pallete-dark="pallete-2"]
+*/
+
+
 
 
 /*
@@ -140,15 +178,16 @@ button.rcx-button--primary {
 }
 
 /* system messages */
-.rcx-message-system {
+html[data-theme="telegram"] .rcx-message-system {
 	margin: 6px 0 !important;
+	max-width: 100%;
 }
 /* system message > user avatar */
-.rcx-message-system .rcx-message-container.rcx-message-container--left {
+html[data-theme="telegram"] .rcx-message-system .rcx-message-container.rcx-message-container--left {
 	display: none !important;
 }
 /* system message > extra items */
-.rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) {
+html[data-theme="telegram"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) {
 	border: none !important;
 	border-radius: 20px;
 	margin-top: 10px;
@@ -156,18 +195,18 @@ button.rcx-button--primary {
 	background-color: #00000014;
 }
 /* system message > extra items > inner content */
-.rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) *:not(a) {
+html[data-theme="telegram"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) *:not(a) {
 	border: none !important;
 	color: #f7f7f7;
 }
 /* system message > message header */
-.rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child {
+html[data-theme="telegram"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child {
 	background-color: #00000014;
 	padding: 4px 10px;
 	border-radius: 15px;
 }
 /* system message > message header > inner content */
-.rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child * {
+html[data-theme="telegram"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child * {
 	color: #f7f7f7;
 }
 
@@ -177,7 +216,7 @@ button.rcx-button--primary {
 	------------------------ CHAT ROOM ------------------------
 */
 
-main.rcx-box--full {
+html[data-theme="telegram"] main.rcx-box--full {
 	background: var(--background-image-full);
 	background-image: var(--background-image-full);
 	background-position: bottom;
@@ -185,24 +224,24 @@ main.rcx-box--full {
 }
 
 /* chat room > header */
-header.rcx-box.rcx-box--full.rcx-room-header {
+html[data-theme="telegram"] header.rcx-box.rcx-box--full.rcx-room-header {
 	backdrop-filter: blur(10px);
 	box-shadow: 2px 2px 4px #0000001f;
 }
-header.rcx-box.rcx-box--full.rcx-room-header > hr {
+html[data-theme="telegram"] header.rcx-box.rcx-box--full.rcx-room-header > hr {
 	display: none !important;
 }
-.messages-box.has-leader > div.wrapper {
+html[data-theme="telegram"] .messages-box.has-leader > div.wrapper {
 	padding-top: initial !important;
 }
 
 /* chat room > messages main container + chat input text area */
-ul.messages-list,
-footer.rc-message-box.footer {
+html[data-theme="telegram"] ul.messages-list,
+html[data-theme="telegram"] footer.rc-message-box.footer {
 	width: 100%;
 	padding: 0 !important;
 }
-ul.messages-list {
+html[data-theme="telegram"] ul.messages-list {
 	padding: 10px 10px 20px 0px !important;
 	display: flex;
 	flex-direction: column;
@@ -213,10 +252,10 @@ ul.messages-list {
 }
 
 /* chat room > messages main container > calendar day divider */
-.rcx-message-divider__bar::after {
+html[data-theme="telegram"] .rcx-message-divider__bar::after {
 	content: none !important;
 }
-.rcx-message-divider__wrapper {
+html[data-theme="telegram"] .rcx-message-divider__wrapper {
 	border-radius: 10px !important;
 	padding: 4px;
 	font-size: 14px;
@@ -224,12 +263,12 @@ ul.messages-list {
 	background-color: #191d2636 !important;
 	color: #fff;
 }
-ul.messages-list > div.rcx-message-divider {
+html[data-theme="telegram"] ul.messages-list > div.rcx-message-divider {
 	margin: 20px !important;
 }
 
 /* chat room > header > room leader block */
-div.rcx-box.rcx-box--full.room-leader {
+html[data-theme="telegram"] div.rcx-box.rcx-box--full.room-leader {
 	display: none !important;
 }
 
@@ -240,7 +279,7 @@ div.rcx-box.rcx-box--full.room-leader {
 */
 
 /* chat room announcement */
-.rcx-box.rcx-box--full:has(> div[data-qa="AnnouncementAnnoucementComponent"]) {
+html[data-theme="telegram"] .rcx-box.rcx-box--full:has(> div[data-qa="AnnouncementAnnoucementComponent"]) {
 	backdrop-filter: blur(10px);
 	background-color: var(--announcement-bg-color-main);
 	position: absolute;
@@ -248,8 +287,8 @@ div.rcx-box.rcx-box--full.room-leader {
 	left: 50%;
 	width: 100%;
 	z-index: 2;
-	max-width: 1000px;
-	border-radius: 50px;
+	max-width: 1200px;
+	border-radius: 5px;
 	transform: translate(-50%, 0);
 	box-shadow: 0px 2px 10px -4px;
 }
@@ -266,13 +305,13 @@ div.rcx-box.rcx-box--full.room-leader {
 */
 
 /* message status (read status icon, useless.) */
-div.rcx-box.rcx-box--full > i.rcx-icon.rcx-icon--name-check {
+html[data-theme="telegram"] div.rcx-box.rcx-box--full > i.rcx-icon.rcx-icon--name-check {
 	padding: 10px;
 	display: none;
 }
 
 /* message (general) */
-.rcx-message {
+html[data-theme="telegram"] .rcx-message {
 	padding: 20px 15px !important;
 	border-radius: 20px !important;
 	margin: 5px 0px !important;
@@ -280,12 +319,12 @@ div.rcx-box.rcx-box--full > i.rcx-icon.rcx-icon--name-check {
 }
 
 /* message */
-ul.messages-list > .rcx-message {
+html[data-theme="telegram"] ul.messages-list > .rcx-message {
 	max-width: 1080px;
 	min-width: 420px;
 }
 /* message */
-ul.messages-list > .rcx-message:before {
+html[data-theme="telegram"] ul.messages-list > .rcx-message:before {
 	/* message body background */
 	content: " ";
 	position: absolute;
@@ -298,7 +337,7 @@ ul.messages-list > .rcx-message:before {
 	border-radius: 20px;
 	box-shadow: 2px 2px 2px 0px #00000014;
 }
-ul.messages-list > .rcx-message:after {
+html[data-theme="telegram"] ul.messages-list > .rcx-message:after {
 	/* triangle from avatar */
 	content: " ";
 	position: absolute;
@@ -310,8 +349,11 @@ ul.messages-list > .rcx-message:after {
 	left: 0;
 	transform: translateX(5.35em) translateY(0.2rem);
 }
+html[data-theme="telegram"] ul.messages-list > .rcx-message.rcx-message--editing:after {
+	content: none !important;
+}
 /* message sequential (messages from user in a row) */
-.rcx-message.rcx-message--sequential:after {
+html[data-theme="telegram"] .rcx-message.rcx-message--sequential:after {
 	/* triangle from avatar */
 	content: none !important;
 	border-right: 16px solid transparent !important;
@@ -323,39 +365,39 @@ ul.messages-list > .rcx-message:after {
 	width: 7px;
 	transform: translateX(7.5em) translateY(-0.6rem) !important;
 }
-ul.messages-list > .rcx-message:focus,
-ul.messages-list > .rcx-message:hover {
+html[data-theme="telegram"] ul.messages-list > .rcx-message:focus,
+html[data-theme="telegram"] ul.messages-list > .rcx-message:hover {
 	background-color: initial !important;
 }
 
 /* message (general) sequential (messages from user in a row) */
-.rcx-message.rcx-message--sequential {
+html[data-theme="telegram"] .rcx-message.rcx-message--sequential {
 	margin-top: -2px !important;
 	padding: 4px 12px !important;
 }
-.rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
+html[data-theme="telegram"] .rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
 	padding-top: 8px !important;
 	padding-bottom: 8px !important;
 }
 /* message > left container (avatar) */
-.rcx-message > div:nth-child(1) {
+html[data-theme="telegram"] .rcx-message > div:nth-child(1) {
 	width: 50px;
 }
 /* message > right container (message) */
-.rcx-message > div:nth-child(2) {
+html[data-theme="telegram"] .rcx-message > div:nth-child(2) {
 	padding-left: 30px !important;
 }
 /* message > last message in thread (useless) */
-.rcx-message.rcx-message-thread {
+html[data-theme="telegram"] .rcx-message.rcx-message-thread {
 	display: none !important;
 }
 /* message (general) > body */
-.rcx-message-body {
+html[data-theme="telegram"] .rcx-message-body {
 	color: var(--messages-font-color-main) !important;
 }
 
 /* message > application name/size block (name of file/image/video) */
-.rcx-box.rcx-box--full:has(> a[download]) {
+html[data-theme="telegram"] .rcx-box.rcx-box--full:has(> a[download]) {
 	margin-top: 18px !important;
 	margin-bottom: 5px !important;
 	opacity: 50%;
@@ -369,32 +411,32 @@ ul.messages-list > .rcx-message:hover {
 */
 
 /* message > application block (file/image/video) */
-.rcx-box.rcx-box--full:has(> div > picture),
-.rcx-message-generic-preview:has(> video) {
+html[data-theme="telegram"].rcx-box.rcx-box--full:has(> div > picture),
+html[data-theme="telegram"] .rcx-message-generic-preview:has(> video) {
 	margin-bottom: 15px !important;
 	border: initial !important;
 	background-color: initial !important;
 	max-width: 40vw !important;
 }
 /* message > picture */
-.rcx-message picture {
+html[data-theme="telegram"] .rcx-message picture {
 	border: none !important;
 }
 
 /* message > thread button (thread/reply) */
-.rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) {
+html[data-theme="telegram"] .rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) {
 	position: absolute;
 	bottom: 0;
 	transform: translate(0, 120%);
 }
 /* message > metrics container (thread button, counter, etc.) */
-.rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) .rcx-message-metrics__content-wrapper * {
+html[data-theme="telegram"] .rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) .rcx-message-metrics__content-wrapper * {
 	color: #fff;
 }
-.rcx-message:has(.rcx-message-metrics__content-item) {
+html[data-theme="telegram"] .rcx-message:has(.rcx-message-metrics__content-item) {
 	margin-bottom: 45px !important;
 }
-.rcx-message .rcx-message-metrics__content-item {
+html[data-theme="telegram"] .rcx-message .rcx-message-metrics__content-item {
 	margin: 0 !important;
 	background-color: var(--metrics-bg-color-main);
 	backdrop-filter: blur(2px);
@@ -402,43 +444,44 @@ ul.messages-list > .rcx-message:hover {
 	border-radius: 10px;
 }
 /* message > metrics container > participants (icon + counter, useless) */
-.rcx-message-metrics__item[title=Участники] {
+html[data-theme="telegram"] .rcx-message-metrics__item[title=Участники],
+html[data-theme="telegram"] .rcx-message-metrics__item[title=Participants] {
 	display: none !important;
 }
 
 /* message > header (author) */
-.rcx-message-container > .rcx-message-header > div > * {
+html[data-theme="telegram"] .rcx-message-container > .rcx-message-header > div > * {
 	padding-right: 10px !important;
 }
 /* message > body */
-.rcx-message-container > .rcx-message-body {
+html[data-theme="telegram"] .rcx-message-container > .rcx-message-body {
 	padding-top: 18px !important;
 	font-size: 15px;
 }
 
 /* message > avatar */
 /* .rcx-message-container.rcx-message-container--left > figure.rcx-box.rcx-box--full.rcx-avatar { */
-.rcx-message-container.rcx-message-container--left > figure.rcx-avatar {
+html[data-theme="telegram"] .rcx-message-container.rcx-message-container--left > figure.rcx-avatar {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
 	overflow: hidden;
 }
-.rcx-message-container.rcx-message-container--left > figure.rcx-avatar img {
+html[data-theme="telegram"] .rcx-message-container.rcx-message-container--left > figure.rcx-avatar img {
 	width: initial;
 	height: initial;
 }
 /* message > username */
-span.rcx-box.rcx-box--full.rcx-message-header__username {
+html[data-theme="telegram"] span.rcx-box.rcx-box--full.rcx-message-header__username {
 	display: none;
 }
 /* message > link's */
-.rcx-box.rcx-box--full.rcx-message-container a {
+html[data-theme="telegram"] .rcx-box.rcx-box--full.rcx-message-container a {
 	color: var(--link-color-main);
 }
 
 /* blockquote */
-blockquote.rcx-box.rcx-attachment__details {
+html[data-theme="telegram"] blockquote.rcx-box.rcx-attachment__details {
 	background-color: var(--quote-bg-color-main) !important;
 	border: 1px solid var(--quote-border-color-main) !important;
 	border-left: 8px solid var(--quote-border-color-main) !important;
@@ -451,32 +494,32 @@ blockquote.rcx-box.rcx-attachment__details {
 
 
 /* message (current user) */
-.rcx-message[data-own=true] {
+html[data-theme="telegram"] .rcx-message[data-own=true] {
 	align-self: flex-end;
 	flex-direction: row-reverse;
 }
 /* message (current user) > right container */
-.rcx-message[data-own=true] > div:nth-child(2) {
+html[data-theme="telegram"] .rcx-message[data-own=true] > div:nth-child(2) {
 	padding-right: 30px !important;
 }
 
 /* message (current user) > body */
-.rcx-message[data-own=true] .rcx-message-container > .rcx-message-body {
+html[data-theme="telegram"] .rcx-message[data-own=true] .rcx-message-container > .rcx-message-body {
 	padding-top: 2px !important;
 }
 /* message (current user, sequential) > body */
-.rcx-message.rcx-message--sequential[data-own=true] .rcx-message-container > .rcx-message-body {
+html[data-theme="telegram"] .rcx-message.rcx-message--sequential[data-own=true] .rcx-message-container > .rcx-message-body {
 	padding-top: 8px !important;
 }
-.rcx-message[data-own=true] .rcx-message-header__time,
-.rcx-message[data-own=true] .rcx-message-header__wrapper {
+html[data-theme="telegram"] .rcx-message[data-own=true] .rcx-message-header__time,
+html[data-theme="telegram"] .rcx-message[data-own=true] .rcx-message-header__wrapper {
 	flex-direction: row-reverse;
 }
 /* message (current user) > name (useless on current user) */
-.rcx-message[data-own=true] .rcx-message-header__wrapper .rcx-message-header__name-container {
+html[data-theme="telegram"] .rcx-message[data-own=true] .rcx-message-header__wrapper .rcx-message-header__name-container {
 	display: none;
 }
-ul.messages-list > .rcx-message[data-own=true]:before {
+html[data-theme="telegram"] ul.messages-list > .rcx-message[data-own=true]:before {
 	/* message body background */
 	content: " ";
 	position: absolute;
@@ -489,7 +532,7 @@ ul.messages-list > .rcx-message[data-own=true]:before {
 	background-color: var(--message-bg-color-mine-main);
 	border-radius: 30px 30px 30px 30px;
 }
-ul.messages-list > .rcx-message[data-own=true]:after {
+html[data-theme="telegram"] ul.messages-list > .rcx-message[data-own=true]:after {
 	/* triangle from avatar */
 	content: " ";
 	position: absolute;
@@ -504,7 +547,7 @@ ul.messages-list > .rcx-message[data-own=true]:after {
 }
 
 /* blockquote (current user blockquote) */
-.rcs-message[data-own="true"] blockquote.rcx-box.rcx-attachment__details {
+html[data-theme="telegram"] .rcs-message[data-own="true"] blockquote.rcx-box.rcx-attachment__details {
 	background-color: var(--quote-bg-color-mine-main) !important;
 	border: 1px solid var(--quote-border-color-main) !important;
 	border-left: 8px solid var(--quote-border-color-main) !important;
@@ -517,16 +560,16 @@ ul.messages-list > .rcx-message[data-own=true]:after {
 */
 
 /* message > reaction container (whole block) */
-.rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
+html[data-theme="telegram"] .rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
 	margin-top: 15px;
 }
 /* message > reaction container (whole block) - sequential */
-.rcx-message.rcx-message--sequential .rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
+html[data-theme="telegram"] .rcx-message.rcx-message--sequential .rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
 	margin-top: 5px;
 	margin-bottom: 8px;
 }
 /* message > reaction container (single reaction div) */
-.rcx-message-reactions__reaction {
+html[data-theme="telegram"] .rcx-message-reactions__reaction {
 	border: none !important;
 	border-radius: 50px !important;
 	padding: 2px 8px !important;
@@ -534,18 +577,89 @@ ul.messages-list > .rcx-message[data-own=true]:after {
 	/* background-color: var(--reaction-bg-color-dark); */
 }
 /* message > reaction (single reaction div) - current user */
-.rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine {
+html[data-theme="telegram"] .rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine {
 	background-color: var(--reaction-mine-bg-color-main);
 	color: #fff;
 }
 /* message > reaction (counter) - current user */
-div.rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine > div.rcx-message-reactions__counter {
+html[data-theme="telegram"] div.rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine > div.rcx-message-reactions__counter {
 	font-weight: bold !important;
 }
 /* message > reaction (icon) */
-.rcx-message-reactions__emoji {
+html[data-theme="telegram"] .rcx-message-reactions__emoji {
 	height: 1.4rem !important;
 	width: 1.4rem !important;
+}
+
+
+
+/*
+	------------------------ THREADS ------------------------
+*/
+
+/* thread main window (lvl 1) */
+html[data-theme="telegram"] aside.rcx-box.rcx-box--full.rcx-vertical-bar {
+	/*margin-left: 6px;*/
+	border-radius: 6px;
+	max-height: 98%;
+	margin: auto 8px;
+	border: initial !important;
+	box-shadow: 2px 2px 2px 0px #00000014;
+}
+/* thread window (lvl 1, wide extended) */
+html[data-theme="telegram"] div.rcx-box.rcx-box--full.rcx-thread-view.rcx-vertical-bar {
+	border-radius: 6px;
+}
+/* thread window > background */
+html[data-theme="telegram"] aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar {
+	background-image: var(--background-image-thread-full);
+	background-position: bottom;
+	background-repeat: repeat;
+}
+/* thread window > header */
+html[data-theme="telegram"] aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar h3 {
+	background-color: var(--rcx-color-surface-light);
+}
+/* thread window (lvl 2) */
+html[data-theme="telegram"] aside section.rcx-box.rcx-box--full {
+	padding: 10px 24px !important;
+}
+/* thread window (lvl 3) */
+html[data-theme="telegram"] aside .thread-list {
+	padding-bottom: 20px !important;
+}
+/* thread window (lvl 4) > messages list */
+html[data-theme="telegram"] ul.thread {
+	display: flex;
+	flex-direction: column;
+	align-content: stretch;
+	flex-wrap: wrap;
+	align-items: stretch;
+	justify-content: flex-start;
+}
+/* thread window > message li */
+html[data-theme="telegram"] ul.thread > li {
+	width: max-content;
+	max-width: 100%;
+}
+/* thread window > message li (current user) */
+html[data-theme="telegram"] ul.thread > li:has([data-own=true]) {
+	align-self: end;
+}
+/* thread window > message */
+html[data-theme="telegram"] ul.thread div.rcx-message {
+	background-color: var(--rcx-color-surface-light);
+	box-shadow: 2px 2px 2px 0px #00000014;
+	margin: 3px 0 !important;
+}
+/* thread window > message (current user) */
+html[data-theme="telegram"] ul.thread div.rcx-message[data-own=true] {
+	background-color: var(--message-bg-color-thread-mine-main);
+}
+/* thread window > message sequential (messages from user in a row) > body */
+html[data-theme="telegram"] ul.thread .rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
 }
 
 
@@ -555,11 +669,11 @@ div.rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine > div.
 */
 
 /* chat input text area > footer */
-footer.rc-message-box.footer {
+html[data-theme="telegram"] footer.rc-message-box.footer {
 	max-width: 100%;
 	border-top: 3px solid #7fa967;
 }
-footer.rc-message-box.footer > div:first-child {
+html[data-theme="telegram"] footer.rc-message-box.footer > div:first-child {
 	border-radius: 0 !important;
 	border: none !important;
 	overflow: auto !important;
@@ -570,17 +684,17 @@ footer.rc-message-box.footer > div:first-child {
 	resize: none !important;
 }
 /* thread > chat input text area > footer */
-aside footer.rc-message-box.footer {
+html[data-theme="telegram"] aside footer.rc-message-box.footer {
 	max-width: 100%;
 	border-top: initial !important;
 	border-radius: initial !important;
 }
 /* chat input text area > toolbar */
-.rcx-box.rcx-box--full[role=toolbar] {
+html[data-theme="telegram"] .rcx-box.rcx-box--full[role=toolbar] {
 	background-color: #ffffff00 !important;
 }
 /* chat input text area > footer > activity block (bottom block, empty) */
-.rcx-box.rcx-box--full.rc-message-box__activity-wrapper {
+html[data-theme="telegram"] .rcx-box.rcx-box--full.rc-message-box__activity-wrapper {
 	display: none;
 }
 
@@ -591,7 +705,7 @@ aside footer.rc-message-box.footer {
 */
 
 /* emoji window */
-.emoji-picker {
+html[data-theme="telegram"] .emoji-picker {
 	border-radius: 15px !important;
 	bottom: 125px !important;
 	top: unset !important;
@@ -602,119 +716,48 @@ aside footer.rc-message-box.footer {
 	transform: translateX(-50%);
 }
 /* emoji window > emoji filter bar container (category icons) */
-.rcx-box.filter {
+html[data-theme="telegram"] .rcx-box.filter {
 	transform: scale(0.8) !important;
 }
 /* all emoji list container */
-.emojis {
+html[data-theme="telegram"] .emojis {
 	padding: 5px 10px !important;
 }
 /* emoji category divider (text) */
-.emoji-list-category {
+html[data-theme="telegram"] .emoji-list-category {
 	color: #73737b !important;
 }
 /* emoji list container (under every category) */
-.emoji-list {
+html[data-theme="telegram"] .emoji-list {
 
 }
 /* single emoji picker item (lvl 1) */
-li.emoji-picker-item {
+html[data-theme="telegram"] li.emoji-picker-item {
 	transform: scale(1.6);
 	margin: 6px 12px !important;
 }
 /* single emoji picker item - on hover */
-.emoji-picker .emojis .emoji-list li.emoji-picker-item:hover {
+html[data-theme="telegram"] .emoji-picker .emojis .emoji-list li.emoji-picker-item:hover {
 	transform: scale(200%);
 	background-color: #ddd;
 }
 /* single emoji (lvl 2) */
-li.emoji-picker-item > .emoji {
+html[data-theme="telegram"] li.emoji-picker-item > .emoji {
 
 }
 /* emoji window > footer container (add custom emoji) */
-.emoji-footer {
+html[data-theme="telegram"] .emoji-footer {
 
 }
 /* emoji window > footer container > link (add custom emoji) */
-.emoji-footer > a.add-custom {
+html[data-theme="telegram"] .emoji-footer > a.add-custom {
 	font-size: 12px !important;
 	color: cornflowerblue !important;
 	padding: 2px !important;
 }
 /* emoji window > footer container > copyright text (useless) */
-.emoji-footer > div {
+html[data-theme="telegram"] .emoji-footer > div {
 	display: none !important;
-}
-
-
-
-/*
-	------------------------ THREADS ------------------------
-*/
-
-/* thread main window (lvl 1) */
-aside.rcx-box.rcx-box--full.rcx-vertical-bar {
-	/*margin-left: 6px;*/
-	border-radius: 6px;
-	max-height: 98%;
-	margin: auto 8px;
-	border: initial !important;
-	box-shadow: 2px 2px 2px 0px #00000014;
-}
-/* thread window (lvl 1, wide extended) */
-div.rcx-box.rcx-box--full.rcx-thread-view.rcx-vertical-bar {
-	border-radius: 6px;
-}
-/* thread window > background */
-aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar {
-	background-image: var(--background-image-thread-full);
-	background-position: bottom;
-	background-repeat: repeat;
-}
-/* thread window > header */
-aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar h3 {
-	background-color: var(--rcx-color-surface-light);
-}
-/* thread window (lvl 2) */
-aside section.rcx-box.rcx-box--full {
-	padding: 10px 24px !important;
-}
-/* thread window (lvl 3) */
-aside .thread-list {
-	padding-bottom: 20px !important;
-}
-/* thread window (lvl 4) > messages list */
-ul.thread {
-	display: flex;
-	flex-direction: column;
-	align-content: stretch;
-	flex-wrap: wrap;
-	align-items: stretch;
-	justify-content: flex-start;
-}
-/* thread window > message li */
-ul.thread > li {
-	width: max-content;
-	max-width: 100%;
-}
-/* thread window > message li (current user) */
-ul.thread > li:has([data-own=true]) {
-	align-self: end;
-}
-/* thread window > message */
-ul.thread div.rcx-message {
-	background-color: var(--rcx-color-surface-light);
-	box-shadow: 2px 2px 2px 0px #00000014;
-	margin: 3px 0 !important;
-}
-/* thread window > message (current user) */
-ul.thread div.rcx-message[data-own=true] {
-	background-color: var(--message-bg-color-thread-mine-main);
-}
-/* thread window > message sequential (messages from user in a row) > body */
-ul.thread .rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
-	padding-top: 8px !important;
-	padding-bottom: 8px !important;
 }
 
 
@@ -734,121 +777,6 @@ span.mention-link.mention-link--user {
 span.mention-link.mention-link--user.mention-link--me {
 	background-color: var(--mention-me-bg-color-main);
 	color: #e84e4e;
-}
-
-
-
-/*
-	------------------------ SIDEBAR ------------------------
-*/
-
-/* sidebar main container */
-div#sidebar-region {
-		max-width: 400px !important;
-		flex: 0 0 var(--sidebar-width) !important;
-}
-
-/* sidebar > items padding's */
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended a.rcx-sidebar-item{
-	padding: 18px 10px !important;
-}
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--medium a.rcx-sidebar-item{
-	padding: 4px 10px !important;
-}
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed a.rcx-sidebar-item{
-	padding: 2px 10px !important;
-}
-
-/* sidebar > type of chat room (system icon) */
-.rc-box.rcx-box--full.rcx-sidebar-item__icon {
-		display: none;
-}
-
-/* sidebar > chat name */
-.rc-box.rcx-box--full.rcx-sidebar-item__container.rcx-sidebar-item__content {
-	padding-left: 10px;
-}
-/* sidebar > chat name > unreaded chat (highlighted) */
-.rcx-sidebar-item__title.rcx-sidebar-item--highlighted {
-	font-size: bold !important;
-}
-
-/* sidebar > avatars */
-#sidebar-region figure.rcx-avatar {
-	width: 45px;
-	height: 45px;
-	border-radius: 35%;
-	overflow: hidden;
-}
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended figure.rcx-avatar {
-	/* extended */
-	--size: 42px;
-	width: var(--size);
-	height: var(--size);
-	border-radius: 35%;
-	overflow: hidden;
-}
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--medium figure.rcx-avatar {
-	/* regular */
-	--size: 35px;
-	width: var(--size);
-	height: var(--size);
-	border-radius: 35%;
-	overflow: hidden;
-}
-div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed figure.rcx-avatar {
-	/* compact */
-	--size: 20px;
-	width: var(--size);
-	height: var(--size);
-	border-radius: 35%;
-	overflow: hidden;
-}
-div#sidebar-region figure.rcx-avatar[data-username] {
-	/* user avatar */
-	width: 35px !important;
-	height: 35px !important;
-}
-
-/* sidebar > items blocks (chats) */
-.rcx-sidebar-item--highlighted * {
-	font-weight: bold !important;
-}
-.rc-box.rcx-box--full.rcx-sidebar-item__subtitle * {
-	font-weight: initial !important;
-}
-.rc-box.rcx-box--full.rcx-sidebar-item__subtitle {
-		font-size: 14px !important;
-}
-
-/* sidebar > items blocks (chats) > highlighted */
-a:has(.rcx-sidebar-item--highlighted) {
-	box-shadow: -50px 0px 150px -135px var(--chat-box-shadow-highlighted-color-main) inset;
-	/*animation: pulse 1.5s ease-in-out infinite;*/
-	/* animation-direction: alternate; */
-	/* border-right: 5px solid #3fd9ff70; */
-	border-radius: unset;
-}
-
-/* sidebar > items blocks (chats) > div's (chat name, message) */
-.rc-box.rcx-box--full.rcx-sidebar-item__container.rcx-sidebar-item__content > div {
-	padding: 0;
-}
-/* sidebar > items blocks (chats) > messages (extended view) */
-span.message-author {
-		color: #5096ab;
-		font-size: 13px;
-		font-weight: 500;
-}
-span.message-body-text {
-	color: #868686;
-	font-size: 13px;
-}
-
-/* sidebar > items blocks (chats) > badge's (default counter) */
-div.rcx-sidebar-item__badge {
-	transform: scale(1.3);
-	display: inherit !important;
 }
 
 
@@ -878,6 +806,162 @@ i.rcx-icon--name-bell-off {
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	letter-spacing: -0.05rem;
+}
+
+
+
+/*
+	------------------------ STICKERS ------------------------
+*/
+
+html[data-theme="telegram"] ul.messages-list > .rcx-message.is-sticker-message:before,
+html[data-theme="telegram"] ul.messages-list > .rcx-message.is-sticker-message:after,
+html[data-theme="telegram"] ul.messages-list > .rcx-message[data-own=true].is-sticker-message:before,
+html[data-theme="telegram"] ul.messages-list > .rcx-message[data-own=true].is-sticker-message:after {
+	/* removing bg from sticker messages */
+	content: none;
+}
+html[data-theme="telegram"] ul.thread div.rcx-message.is-sticker-message {
+	/* removing bg from sticker messages in thread */
+	background-color: transparent;
+	box-shadow: none;
+	margin: none !important;
+	border: none;
+}
+html[data-theme="telegram"] ul.thread div.rcx-message[data-own=true].is-sticker-message {
+	/* removing bg from sticker messages in thread */
+	background-color: transparent;
+	box-shadow: none;
+	border: none;
+}
+html[data-theme="telegram"] .rcx-message.is-sticker-message .rcx-message-body > div {
+	text-align: left;
+}
+html[data-theme="telegram"] .rcx-message[data-own=true].is-sticker-message .rcx-message-body > div {
+	text-align: end;
+}
+.rcx-message.is-sticker-message .rcx-message-header {
+	/* hide message header on sticker */
+	display: none;
+}
+
+/* sticker (emoji) in message */
+span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"] {
+	width: 240px !important;
+	height: 240px !important;
+}
+
+
+
+/*
+	------------------------ SIDEBAR ------------------------
+*/
+
+/* sidebar main container */
+div#sidebar-region {
+		max-width: 400px !important;
+		flex: 0 0 var(--sidebar-width) !important;
+}
+
+/* sidebar > items padding's */
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended a.rcx-sidebar-item{
+	padding: 13px 15px !important;
+}
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--medium a.rcx-sidebar-item{
+	padding: 4px 15px !important;
+}
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed a.rcx-sidebar-item{
+	padding: 3px 15px !important;
+}
+
+/* sidebar > type of chat room (system icon) */
+.rc-box.rcx-box--full.rcx-sidebar-item__icon {
+		display: none;
+}
+
+/* sidebar > chat name */
+.rc-box.rcx-box--full.rcx-sidebar-item__container.rcx-sidebar-item__content {
+	padding-left: 10px;
+}
+/* sidebar > items blocks (chats) > div's (chat name, message) */
+.rc-box.rcx-box--full.rcx-sidebar-item__container.rcx-sidebar-item__content > div {
+	padding: 1px 0;
+}
+/* sidebar > chat name > unreaded chat (highlighted) */
+.rcx-sidebar-item__title.rcx-sidebar-item--highlighted {
+	font-size: bold !important;
+}
+
+/* sidebar > avatars */
+#sidebar-region figure.rcx-avatar {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended figure.rcx-avatar {
+	/* extended */
+	--size: 50px;
+	width: var(--size);
+	height: var(--size);
+	overflow: hidden;
+}
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--medium figure.rcx-avatar {
+	/* regular */
+	--size: 35px;
+	width: var(--size);
+	height: var(--size);
+	overflow: hidden;
+}
+div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed figure.rcx-avatar {
+	/* compact */
+	--size: 20px;
+	width: var(--size);
+	height: var(--size);
+	overflow: hidden;
+}
+div#sidebar-region figure.rcx-avatar[data-username] {
+	/* user avatar */
+	width: 35px !important;
+	height: 35px !important;
+}
+
+/* sidebar > items blocks (chats) */
+.rcx-sidebar-item--highlighted * {
+	font-weight: bold !important;
+}
+.rc-box.rcx-box--full.rcx-sidebar-item__subtitle * {
+	font-weight: initial !important;
+}
+.rc-box.rcx-box--full.rcx-sidebar-item__subtitle {
+		font-size: 14px !important;
+}
+
+/* sidebar > items blocks (chats) > highlighted */
+a:has(.rcx-sidebar-item--highlighted) {
+	box-shadow: -50px 0px 150px -135px var(--chat-box-shadow-highlighted-color-main) inset;
+	border-radius: unset;
+}
+
+/* sidebar > items blocks (chats) > messages (extended view) */
+span.message-author {
+		color: #489bb4;
+		font-size: 13px;
+		font-weight: 500;
+}
+span.message-body-text {
+	color: #868686;
+	font-size: 13px;
+}
+
+/* sidebar > items blocks (chats) > badge's (default counter) */
+div.rcx-sidebar-item__badge {
+	transform: scale(1.3);
+	display: inherit !important;
+}
+/* sidebar > items blocks (chats extended) > message timestamp */
+.rcx-sidebar-item__container .rcx-sidebar-item__time {
+	color: #4a4d54;
 }
 
 
@@ -930,25 +1014,38 @@ div.sidebar-folder:hover {
 }
 div.sidebar-folder p {
 	margin: auto;
-	color: azure;
+	color: var(--folder-icon-color);
 	font-variant: all-petite-caps;
 	user-select: none;
+	font-weight: bold;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
 }
-.folder-svg-icon {
+div.sidebar-folder.folder-selected p {
+	color: var(--folder-icon-color-selected);
+}
+div.sidebar-folder .folder-svg-icon {
 	--folder-icon-size: 36px;
 	color: var(--folder-icon-color);
-	stroke: #444;
+	fill: currentColor;
 	width: var(--folder-icon-size);
 	height: var(--folder-icon-size);
 }
-div.sidebar-folder:hover .folder-svg-icon {
-	color: var(--folder-icon-color);
+div.sidebar-folder.folder-selected .folder-svg-icon {
+	color: var(--folder-icon-color-selected);
+}
+div.sidebar-folder .folder-svg-icon path {
+	fill: currentColor;
 }
 span.unread-chats-counter {
 	position: absolute;
 	width: 24px;
 	height: 24px;
-	background-color: dodgerblue;
+	/* background-color: dodgerblue; */
+	background-color: var(--folder-icon-color-selected);
 	top: 0;
 	right: 0;
 	transform: translate(-5px, 5px);
@@ -964,54 +1061,14 @@ span.unread-chats-counter {
 	letter-spacing: -1px;
 	border: 3px solid #31363f;
 }
-span.unread-chats-counter.all {
+div.sidebar-folder.general-folder span.unread-chats-counter {
 	background-color: var(--folder-icon-color);
+}
+div.sidebar-folder.general-folder.folder-selected span.unread-chats-counter {
+	background-color: var(--folder-icon-color-selected);
 }
 div.sidebar-folder.folder-selected span.unread-chats-counter {
 		border: 3px solid var(--folder-background-selected);
-}
-
-
-
-/*
-	------------------------ STICKERS ------------------------
-*/
-
-ul.messages-list > .rcx-message.is-sticker-message:before,
-ul.messages-list > .rcx-message.is-sticker-message:after,
-ul.messages-list > .rcx-message[data-own=true].is-sticker-message:before,
-ul.messages-list > .rcx-message[data-own=true].is-sticker-message:after {
-	/* removing bg from sticker messages */
-	content: none;
-}
-ul.thread div.rcx-message.is-sticker-message {
-	/* removing bg from sticker messages in thread */
-	background-color: transparent;
-	box-shadow: none;
-	margin: none !important;
-	border: none;
-}
-ul.thread div.rcx-message[data-own=true].is-sticker-message {
-	/* removing bg from sticker messages in thread */
-	background-color: transparent;
-	box-shadow: none;
-	border: none;
-}
-.rcx-message.is-sticker-message .rcx-message-body > div {
-	text-align: left;
-}
-.rcx-message[data-own=true].is-sticker-message .rcx-message-body > div {
-	text-align: end;
-}
-.rcx-message.is-sticker-message .rcx-message-header {
-	/* hide message header on sticker */
-	display: none;
-}
-
-/* sticker (emoji) in message */
-span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"] {
-	width: 240px !important;
-	height: 240px !important;
 }
 
 
@@ -1026,14 +1083,16 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 	width: 100%;
 	height: 100%;
 	background-color: var(--rcx-color-surface-light);
-	background-image: var(--background-image-full);
 	background-position: bottom;
 	background-repeat: repeat;
 	z-index: 100;
 	transition: ease .3s;
 }
+html[data-theme="telegram"] .chat-area-loader {
+	background-image: var(--background-image-full);
+}
 .chat-loader {
-	color: #FFF;
+	color: #348adb;
 	font-size: 7px;
 	position: absolute;
 	text-indent: -9999em;
@@ -1041,6 +1100,9 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 	top: 50%;
 	left: 50%;
 	transform: translate(0%, -150%);
+}
+html[data-theme="telegram"] .chat-loader {
+	color: #FFF;
 }
 .chat-loader, .chat-loader:before, .chat-loader:after {
 	border-radius: 50%;
@@ -1091,6 +1153,7 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 /* Popup container - can be anything you want */
 .custom-popup {
 	position: relative;
+	overflow: initial !important;
 }
 /* The actual popup */
 .custom-popup .popup-window {
@@ -1107,8 +1170,8 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 	/* display: flex; */
 	flex-direction: column;
 	flex-wrap: wrap;
-	align-items: center;
-	align-content: center;
+	/* align-items: center; */
+	/* align-content: center; */
 	border-radius: 6px;
 	box-shadow: 2px 2px 6px #1b1b1b;
 }
@@ -1129,6 +1192,11 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 	margin-bottom: 6px;
 	border-radius: 4px;
 }
+p.add-folder-button {
+	font-size: 1.1rem;
+	font-family: system-ui;
+	/* color: #9ea2a8 !important; */
+}
 
 .manage-folder-buttons {
 	display: flex;
@@ -1143,8 +1211,71 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 	max-height: 30px;
 	width: 100%;
 	margin: 8px 4px 8px 12px;
+	background-color: #3c414f !important;
 }
 .manage-folder-buttons button svg {
 	width: 100%;
 	height: 100%;
+}
+
+
+
+/*
+	------------------------ THEME SETTINGS POPUP ------------------------
+*/
+
+form#form-theme-settings {
+	padding: 15px 20px;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	justify-content: flex-start;
+}
+form#form-theme-settings h2 {
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: 25px;
+	text-shadow: 1px 4px black;
+}
+form#form-theme-settings fieldset {
+	margin-bottom: 20px;
+	padding: 10px 15px;
+	border: 3px solid #8bc1e108;
+	border-radius: 16px;
+}
+form#form-theme-settings fieldset div {
+	display: flex;
+	align-items: center;
+	padding: 4px 0;
+}
+form#form-theme-settings legend {
+	font-weight: bold;
+	color: slategray;
+	padding: 0 10px;
+}
+form#form-theme-settings label {
+	font-weight: normal;
+}
+form#form-theme-settings input {
+	margin-right: 6px;
+}
+form#form-theme-settings .big-radio {
+	background-color: #8bdcff17;
+	border: 1px solid #4e4e4e29;
+	border-radius: 10px;
+	padding: 8px !important;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	flex-direction: row;
+}
+form#form-theme-settings .big-radio:has([disabled]) {
+    background-color: #363e494d;
+}
+form#form-theme-settings div:has([disabled]) label {
+    color: #85858540 !important;
 }
