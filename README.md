@@ -9,7 +9,7 @@
 
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
 
-- JS and CSS code was developed from user position (when you dont have permissions to change css and js on server side), so to make this works you need to install Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- If you dont have permissions to change css and js on server side, you can use Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) to use theme in your browser
 - works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.2.11)
 
 ### Current features:
@@ -26,7 +26,7 @@
  - [x] message formatting on extended view (coloring author)
 - **Char room / Chat messages**
  - [x] new messages / threads style
- - [x] system messages removed
+ - [x] system messages style
  - [x] chat room leader in header removed
  - [x] last message in thread removed (in general messages list)
  - [x] messages formatted (useless information removed)
@@ -49,22 +49,12 @@
 - click "add"
 - copy/past js and css code from repository into sections
 - in js code change `isLocal` variable to `true`
-- in js code change `messageReadReceiptEnabled` variable to `true` or `false` if it's enabled on your server (required for correct work of stickers)
 - save & reload rocketchat window
 #### for server:
 - go to `Workspace > Settings > Layout`
 - copy/paste css code into `Custom CSS` section
 - copy/paste js code into `Custom Scripts > Custom Script for Logged In Users`
 - in js code change `isLocal` variable to `false`
-- in js code change `messageReadReceiptEnabled` variable to `true` or `false` if it's enabled on your server (required for correct work of stickers)
-
-
-`messageReadReceiptEnabled` - it's a checkbox in messages:
-![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9a5a0669-cdaa-4226-9c7d-c3d19ef41026)
-
-for administrator this option can be found in `Workspace > Settings > Message > Read Receipts`: 
-![image](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/0bd5f727-55f1-40d7-bc4d-3df3bc0bbde6)
-
 
 
 ## Previews
