@@ -32,6 +32,8 @@ const preparedFolders = {};
 const generalFolderUnreadChats = {};
 const chatFolders = getLocalStorageChatFolders();
 const allChatsLabel = "All chats";
+const personalChatsLabel = "Personal";
+const reservedNames = [allChatsLabel.toLowerCase(), "settings", "personal"];
 let loaderTimeout;
 
 
@@ -54,8 +56,12 @@ function getLocalStorageChatFolders() {
 
 function setLocalStorageChatFolder(folderName) {
 	let chatFolders = getLocalStorageChatFolders();
+	if (reservedNames.indexOf(folderName.toLowerCase()) !== -1) {
+		return false;
+	}
 	chatFolders[folderName] = [];
 	localStorage.setItem("chatFolders", JSON.stringify(chatFolders));
+	return true;
 }
 
 function removeLocalStorageChatFolder(folderName) {
@@ -94,8 +100,8 @@ function getLocalStorageThemeSettings() {
 		themeSettings = {
 			"theme": "telegram",
 			"bg": "bg-1",
-			"pallete-light": "pallete-green",
-			"pallete-dark": "pallete-dark"
+			"palette-light": "palette-green",
+			"palette-dark": "palette-dark"
 		};
 		localStorage.setItem("themeSettings", JSON.stringify(themeSettings));
 	}
@@ -113,8 +119,8 @@ function setLocalStorageThemeSettings(data) {
 function updateThemeSettingsHtml(data) {
 	root.setAttribute("data-theme", data["theme"]);
 	root.setAttribute("data-bg", data["bg"]);
-	root.setAttribute("data-pallete-light", data["pallete-light"]);
-	root.setAttribute("data-pallete-dark", data["pallete-dark"]);
+	root.setAttribute("data-palette-light", data["palette-light"]);
+	root.setAttribute("data-palette-dark", data["palette-dark"]);
 	root.setAttribute("data-opacity-light", data["opacity-light"]);
 	root.setAttribute("data-opacity-dark", data["opacity-dark"]);
 }
@@ -157,6 +163,22 @@ function getSettingsIconSvg() {
 			15.3096 7.30964 14.75 8 14.75C8.69036 14.75 9.25 15.3096 9.25 16C9.25 16.6904
 			8.69036 17.25 8 17.25C7.30964 17.25 6.75 16.6904 6.75 16Z
 		" fill="#000000" clip-rule="evenodd" fill-rule="evenodd"/>
+	`;
+	return iconSvg;
+}
+
+function getPersonalIconSvg() {
+	const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	iconSvg.classList.add("folder-svg-icon");
+	iconSvg.setAttribute("viewBox", "0 0 516 516");
+	iconSvg.innerHTML = `
+		<path d="
+			M256,48C141.31,48,48,141.31,48,256s93.31,208,208,208,208-93.31,208-208S370.69,48,256,48ZM205.78,164.82
+			C218.45,151.39,236.28,144,256,144s37.39,7.44,50.11,20.94
+			C319,178.62,325.27,197,323.79,216.76,320.83,256,290.43,288,256,288s-64.89-32-67.79-71.25
+			C186.74,196.83,193,178.39,205.78,164.82ZM256,432a175.49,175.49,0,0,1-126-53.22,122.91,122.91,0,0,1,35.14-33.44
+			C190.63,329,222.89,320,256,320s65.37,9,90.83,25.34A122.87,122.87,0,0,1,382,378.78,175.45,175.45,0,0,1,256,432Z
+		"/>
 	`;
 	return iconSvg;
 }
@@ -248,7 +270,14 @@ function setupFolder(foldersContainer, folderName) {
 	const folderUnreadedChatsCounter = document.createElement("span");
 	folderUnreadedChatsCounter.className = "unread-chats-counter";
 
-	const iconSvg = folderName == allChatsLabel ? getChatsIconSvg() : getFolderIconSvg();
+	let iconSvg;
+	if (folderName == allChatsLabel) {
+		iconSvg = getChatsIconSvg();
+	} else if (folderName == personalChatsLabel) {
+		iconSvg = getPersonalIconSvg();
+	} else {
+		iconSvg = getFolderIconSvg();
+	}
 	folderDiv.appendChild(iconSvg);
 
 	folderDiv.classList.add("sidebar-folder");
@@ -262,11 +291,14 @@ function setupFolder(foldersContainer, folderName) {
 	folderDiv.appendChild(folderUnreadedChatsCounter);
 
 	const mainFolderButton = document.querySelector(`div.sidebar-folder[folder-label="${allChatsLabel}"]`);
-	if (mainFolderButton) {
+	const personalChatsFolderButton = document.querySelector(`div.sidebar-folder[folder-label="${personalChatsLabel}"]`);
+	if (personalChatsFolderButton) {
+		personalChatsFolderButton.before(folderDiv);
+	} else if (mainFolderButton) {
 		mainFolderButton.before(folderDiv);
-	} else {
+  } else {
 		foldersContainer.append(folderDiv);
-	}
+  }
 }
 
 
@@ -284,60 +316,6 @@ function setupThemeSettingsButton(foldersContainer, buttonName) {
 	settingsDiv.addEventListener("click", handleChangeFolderEvent);
 
 	foldersContainer.append(settingsDiv);
-}
-
-function setupAddFolderButton(navbarItemsContainer, foldersContainer) {
-	const folderDiv = document.createElement("div");
-	const folderNameP = document.createElement("p");
-
-	// POPUP
-	const popupDiv = document.createElement("div");
-	popupDiv.classList.add("popup-window");
-
-	let form = document.createElement("form");
-	form.className = "add-folder-form";
-	form.id = "add-folder-form";
-	form.autocomplete = "off";
-
-	let textInput = document.createElement("input");
-	textInput.placeholder = "Folder name";
-	textInput.name = "folder-name";
-	textInput.className = "add-folder-input";
-	textInput.id = "add-folder-input";
-	form.appendChild(textInput);
-
-	let submitButton = document.createElement("input");
-	submitButton.value = "Add folder";
-	submitButton.type = "submit";
-	submitButton.className = "rcx-box rcx-box--full rcx-box--animated rcx-button--small rcx-button--primary rcx-button add-folder-button";
-	form.appendChild(submitButton);
-
-	popupDiv.append(form);
-	folderDiv.append(popupDiv);
-
-	form.addEventListener("submit", (e) => {
-		e.preventDefault();
-
-		let addFolderInput = document.getElementById("add-folder-input");
-		let newFolderName = addFolderInput.value ? addFolderInput.value : null;
-		if (newFolderName) {
-			setupFolder(foldersContainer, addFolderInput.value);
-			setupFolderArea(navbarItemsContainer, addFolderInput.value, []);
-			setLocalStorageChatFolder(addFolderInput.value);
-			addFolderInput.value == "";
-			form.reset();
-			folderDiv.classList.remove("show");
-		}
-	});
-	// /POPUP
-
-	folderNameP.innerHTML = "+";
-	folderNameP.classList.add("add-folder-button");
-	folderDiv.classList.add("sidebar-folder");
-	folderDiv.classList.add("sidebar-folder--add-folder");
-	folderDiv.classList.add("custom-popup");
-	folderDiv.appendChild(folderNameP);
-	foldersContainer.append(folderDiv);
 }
 
 
@@ -379,8 +357,11 @@ function setupFolderArea(navbarItemsContainer, folderName, items) {
 	}
 	folderItemsContainer.innerHTML = html;
 
-	let manageFolderDiv = setupFolderManageButtons();
-	folderItemsContainer.prepend(manageFolderDiv);
+	// add folder manage buttons.
+	if (!(folderName == personalChatsLabel)) {
+		let manageFolderDiv = setupFolderManageButtons();
+		folderItemsContainer.prepend(manageFolderDiv);
+	}
 
 	navbarItemsContainerParent.append(folderItemsContainer);
 }
@@ -396,7 +377,19 @@ function setupThemeSettingsArea(navbarItemsContainer, folderName) {
 	updateThemeSettingsHtml(themeSettings);
 	const checked = (param, value) => { return themeSettings[param] == value ? 'checked="checked"' : "" }
 
-	html = `
+	let addFolderFormHtml = `
+		<form class="add-folder-form" id="add-folder-form" autocomplete="off">
+			<h2>Add new folder</h2>
+			<div>
+				<input placeholder="Folder name" name="folder-name" class="add-folder-input" id="add-folder-input">
+			</div>
+			<div>
+				<input type="submit" value="Add folder" class="rcx-box rcx-box--full rcx-box--animated rcx-button--small rcx-button--primary rcx-button add-folder-button">
+			</div>
+		</form>
+	`;
+
+	let settingsFormHtml = `
 		<form id="form-theme-settings">
 			<h2>Theme settings</h2>
 			<fieldset>
@@ -438,41 +431,65 @@ function setupThemeSettingsArea(navbarItemsContainer, folderName) {
 			</fieldset>
 
 			<fieldset>
-				<legend>Background pallete (light)</legend>
+				<legend>Background palette (light)</legend>
 				<div>
-					<input type="radio" id="pallete-light-1" name="pallete-light" value="pallete-green" ${checked("pallete-light", "pallete-green")}/>
-					<label for="pallete-light-1">Pallete green</label>
+					<input type="radio" id="palette-light-1" name="palette-light" value="palette-green" ${checked("palette-light", "palette-green")}/>
+					<label for="palette-light-1">Palette green</label>
 				</div>
 				<div>
-					<input type="radio" id="pallete-light-2" name="pallete-light" value="pallete-blue" ${checked("pallete-light", "pallete-blue")}/>
-					<label for="pallete-light-2">Pallete blue</label>
+					<input type="radio" id="palette-light-2" name="palette-light" value="palette-blue" ${checked("palette-light", "palette-blue")}/>
+					<label for="palette-light-2">Palette blue</label>
 				</div>
 			</fieldset>
 
 			<fieldset>
-				<legend>Background pallete (dark)</legend>
+				<legend>Background palette (dark)</legend>
 				<div>
-					<input type="radio" id="pallete-dark-1" name="pallete-dark" value="pallete-dark" ${checked("pallete-dark", "pallete-dark")}/>
-					<label for="pallete-dark-1">Pallete dark</label>
+					<input type="radio" id="palette-dark-1" name="palette-dark" value="palette-dark" ${checked("palette-dark", "palette-dark")}/>
+					<label for="palette-dark-1">Palette dark</label>
 				</div>
 				<div>
-					<input type="radio" id="pallete-dark-2" name="pallete-dark" value="pallete-darker" ${checked("pallete-dark", "pallete-darker")}/>
-					<label for="pallete-dark-2">Pallete darker</label>
+					<input type="radio" id="palette-dark-2" name="palette-dark" value="palette-darker" ${checked("palette-dark", "palette-darker")}/>
+					<label for="palette-dark-2">Palette darker</label>
 				</div>
 			</fieldset>
 		</form>
 	`;
-	folderItemsContainer.innerHTML = html;
+	folderItemsContainer.innerHTML = addFolderFormHtml + settingsFormHtml;
 	navbarItemsContainerParent.append(folderItemsContainer);
 
-	const form = document.querySelector("#form-theme-settings");
-	form.addEventListener("change", (e) => {
+	// ----------- Settings form form handler -----------
+	const settingsForm = document.querySelector("#form-theme-settings");
+	settingsForm.addEventListener("change", (e) => {
 		e.preventDefault();
-		const data = Object.fromEntries(new FormData(form).entries());
-		console.log(data);
-  	setLocalStorageThemeSettings(data);
+		const data = Object.fromEntries(new FormData(settingsForm).entries());
+		setLocalStorageThemeSettings(data);
 		updateThemeSettingsHtml(data);
 	});
+	// ----------- /Settings form form handler -----------
+
+	// ----------- Add folder form handler -----------
+	const foldersContainer = document.querySelector("div.sidebar-folders");
+	const addFolderForm = document.querySelector("#add-folder-form");
+	addFolderForm.addEventListener("submit", (e) => {
+		e.preventDefault();
+		let addFolderInput = document.getElementById("add-folder-input");
+		let newFolderName = addFolderInput.value ? addFolderInput.value : null;
+		if (newFolderName) {
+			let success = setLocalStorageChatFolder(addFolderInput.value);
+			if (!success) {
+				// reserved names can not be created as folders.
+				addFolderInput.value == "";
+				addFolderForm.reset();
+				return;
+			}
+			setupFolder(foldersContainer, addFolderInput.value);
+			setupFolderArea(navbarItemsContainer, addFolderInput.value, []);
+			addFolderInput.value == "";
+			addFolderForm.reset();
+		}
+	});
+	// ----------- /Add folder form handler -----------
 }
 
 
@@ -710,13 +727,20 @@ async function setupNavbar(navbarItemsContainer) {
 	chatsContainer.prepend(foldersContainer);
 
 	// setup items
+	const personalChats = [];
 	const navbarItems = await parseNavbarItems(navbarItemsContainer);
 	for (let [folderName, itemLabels] of Object.entries(chatFolders)) {
 		preparedFolders[folderName] = [];
 		for (let item of navbarItems) {
-			let elemDataAttr = item.firstChild.getAttribute("aria-label");
-			if (itemLabels.includes(elemDataAttr)) {
+			// prepare folders chats
+			let elemAriaLabel = item.firstChild.getAttribute("aria-label");
+			if (itemLabels.includes(elemAriaLabel)) {
 				preparedFolders[folderName].push(item.cloneNode(true));
+			}
+			// prepare personal chats
+			let elemHref = item.firstChild.getAttribute("href");
+			if (elemHref.indexOf("direct/") !== -1 && personalChats.indexOf(item) === -1) {
+				personalChats.push(item);
 			}
 		}
 	}
@@ -731,12 +755,13 @@ async function setupNavbar(navbarItemsContainer) {
 	setupFolder(foldersContainer, allChatsLabel);
 	navbarItems.forEach((element) => { formatExtendedNavbarItems(element) });
 
+	// setup "personal" folder.
+	setupFolder(foldersContainer, personalChatsLabel);
+	setupFolderArea(navbarItemsContainer, personalChatsLabel, personalChats);
+
 	// setup "Settings" folder & area.
 	setupThemeSettingsButton(foldersContainer, "settings");
 	setupThemeSettingsArea(navbarItemsContainer, "settings");
-
-	// setup "add folder" button
-	setupAddFolderButton(navbarItemsContainer, foldersContainer);
 }
 
 
@@ -846,7 +871,7 @@ function startObserveFolderItems(folderItemsContainer, isGeneralFolder) {
 }
 
 
-function matchPallete(paletteElem) {
+function matchPalette(paletteElem) {
 	if (paletteElem && paletteElem.innerHTML.length > 200) {
 		// dark theme
 		root.classList.add("dark-theme");
@@ -859,10 +884,10 @@ function matchPallete(paletteElem) {
 
 function startObserveMainPalette() {
 	const paletteElem = document.querySelector("style#main-palette");
-	matchPallete(paletteElem);
+	matchPalette(paletteElem);
 	let observer = new MutationObserver(function (mutations) {
 		mutations.forEach(function (mutation) {
-			matchPallete(paletteElem);
+			matchPalette(paletteElem);
 		});
 	});
 	observer.observe(paletteElem, { characterData: true, subtree: true });
