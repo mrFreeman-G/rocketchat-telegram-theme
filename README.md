@@ -1,10 +1,7 @@
+![Peek 2023-07-30 21-16](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9b941018-18b4-423b-a464-6357a48236a3)
 
 # Telegram theme for Rocketchat
 > "Is it telegram?! No it's rocketchat :("
-
-
-![Peek 2023-07-30 21-16](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9b941018-18b4-423b-a464-6357a48236a3)
-
 
 
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
