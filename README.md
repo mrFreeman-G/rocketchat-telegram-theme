@@ -10,12 +10,17 @@
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
 
 - If you dont have permissions to change css and js on server side, you can use Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) to use theme in your browser
-- works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.2.11)
+- works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.3.0)
 
 ### Current features:
 - **General telegram themes**
  - [x] light
  - [x] dark
+- **Theme settings**
+ - [x] switch to `default` RocketChat theme
+ - [ ] switch to `Flat` theme (WIP)
+ - [x] switch to `Telegram` theme
+ - [x] color palette variations
 - **Chat folders**
  - [x] add / remove folder
  - [x] add / remove chat in folder
