@@ -402,7 +402,7 @@ function setupThemeSettingsArea(navbarItemsContainer, folderName) {
 				</div>
 				<div>
 					<label for="theme-flat" class="big-radio">
-						<input type="radio" id="theme-flat" name="theme" value="flat" ${checked("theme", "flat")} disabled />
+						<input type="radio" id="theme-flat" name="theme" value="flat" ${checked("theme", "flat")} />
 						Flat
 					</label>
 				</div>

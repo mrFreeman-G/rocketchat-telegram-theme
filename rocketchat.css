@@ -105,6 +105,28 @@
 	--folder-icon-color-selected: #4599db;
 	--folder-background: #262931;
 	--folder-background-selected: #262931;
+
+
+	/* flat theme */
+	--message-bg-color-flat-mine-light: #f3fcfe;
+	--message-bg-color-flat-mine-dark: #34597d;
+	--message-bg-color-flat-mine-main: var(--message-bg-color-flat-mine-light);
+
+	--background-flat-color-light: #f5f3fa;
+	--background-flat-color-dark: #21252a;
+	--background-flat-color-main: var(--background-flat-color-light);
+
+	--message-border-flat-color-light: #eee;
+	--message-border-flat-color-dark: #2a2f3a;
+	--message-border-flat-color-main: var(--message-border-flat-color-light);
+
+	--system-message-background-color-flat-light: #00000014;
+	--system-message-background-color-flat-dark: #00000014;
+	--system-message-background-color-flat-main: var(--system-message-background-color-flat-light);
+
+	--system-message-font-color-flat-light: #7d7d7d;
+	--system-message-font-color-flat-dark: #bac1c5;
+	--system-message-font-color-flat-main: var(--system-message-font-color-flat-light);
 }
 
 :root.dark-theme {
@@ -126,6 +148,12 @@
 	--announcement-bg-color-main: var(--announcement-bg-color-dark);
 	--chat-box-shadow-highlighted-color-main: var(--chat-box-shadow-highlighted-color-dark);
 	--messages-font-color-main: var(--messages-font-color-dark);
+
+	/* flat theme */
+	--background-flat-color-main: var(--background-flat-color-dark);
+	--message-border-flat-color-main: var(--message-border-flat-color-dark);
+	--system-message-background-color-flat-main: var(--system-message-background-color-flat-dark);
+	--system-message-font-color-flat-main: var(--system-message-font-color-flat-dark);
 }
 
 html[data-bg="bg-1"] {
@@ -258,7 +286,7 @@ html[data-theme="telegram"] .rcx-message-divider__bar::after {
 }
 html[data-theme="telegram"] .rcx-message-divider__wrapper {
 	border-radius: 10px !important;
-	padding: 4px;
+	padding: 2px 18px;
 	font-size: 14px;
 	backdrop-filter: blur(4px);
 	background-color: #191d2636 !important;
@@ -486,6 +514,9 @@ html[data-theme="telegram"] blockquote.rcx-box.rcx-attachment__details {
 	background-color: var(--quote-bg-color-main) !important;
 	border: 1px solid var(--quote-border-color-main) !important;
 	border-left: 8px solid var(--quote-border-color-main) !important;
+}
+html[data-theme="telegram"] blockquote.rcx-box.rcx-attachment__details * {
+	color: #66676b;
 }
 
 
@@ -845,7 +876,7 @@ html[data-theme="telegram"] .rcx-message.is-sticker-message .rcx-message-body > 
 html[data-theme="telegram"] .rcx-message[data-own=true].is-sticker-message .rcx-message-body > div {
 	text-align: end;
 }
-.rcx-message.is-sticker-message .rcx-message-header {
+html[data-theme="telegram"] .rcx-message.is-sticker-message .rcx-message-header {
 	/* hide message header on sticker */
 	display: none;
 }
@@ -1305,4 +1336,514 @@ p.add-folder-button {
 }
 [folder-label-area="settings"] form div:has([disabled]) label {
     color: #85858540 !important;
+}
+
+
+
+/*
+--------------------------------------------------------------------------------------------
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+																		 		FLAT THEME
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+--------------------------------------------------------------------------------------------
+*/
+
+
+
+/*
+	------------------------ GENERAL ------------------------
+*/
+
+/* system messages */
+html[data-theme="flat"] .rcx-message-system {
+	margin: 6px 0 !important;
+	max-width: 100%;
+}
+/* system message > user avatar */
+html[data-theme="flat"] .rcx-message-system .rcx-message-container.rcx-message-container--left {
+	display: none !important;
+}
+/* system message > extra items */
+html[data-theme="flat"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) {
+	border: none !important;
+	border-radius: 20px;
+	margin-top: 5px;
+	color: var(--messages-font-color-main);
+	background-color: var(--system-message-background-color-flat-main);
+}
+/* system message > extra items > inner content */
+html[data-theme="flat"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:not(:first-child) *:not(a) {
+	border: none !important;
+	color: var(--system-message-font-color-flat-main);
+}
+/* system message > message header */
+html[data-theme="flat"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child {
+	background-color: var(--system-message-background-color-flat-main);
+	padding: 4px 12px;
+	border-radius: 15px;
+}
+/* system message > message header > inner content */
+html[data-theme="flat"] .rcx-message-system .rcx-message-system__container .rcx-message-system__block:first-child * {
+	color: var(--system-message-font-color-flat-main);
+}
+
+
+
+/*
+	------------------------ CHAT ROOM ------------------------
+*/
+
+html[data-theme="flat"] main.rcx-box--full {
+	background-color: var(--background-flat-color-main) !important;
+	background-position: bottom;
+	background-attachment: fixed;
+	background-repeat: repeat;
+}
+
+/* chat room > header */
+html[data-theme="flat"] header.rcx-box.rcx-box--full.rcx-room-header {
+	backdrop-filter: blur(10px);
+	box-shadow: 2px 2px 4px #0000001f;
+}
+html[data-theme="flat"] header.rcx-box.rcx-box--full.rcx-room-header > hr {
+	display: none !important;
+}
+html[data-theme="flat"] .messages-box.has-leader > div.wrapper {
+	padding-top: initial !important;
+}
+
+/* chat room > messages main container + chat input text area */
+html[data-theme="flat"] ul.messages-list,
+html[data-theme="flat"] footer.rc-message-box.footer {
+	width: 100%;
+	padding: 0 !important;
+}
+html[data-theme="flat"] ul.messages-list {
+	padding: 10px 10px 20px 0px !important;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-content: stretch;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+/* chat room > messages main container > calendar day divider */
+html[data-theme="flat"] .rcx-message-divider__bar::after {
+	content: none !important;
+}
+html[data-theme="flat"] .rcx-message-divider__wrapper {
+	border-radius: 10px !important;
+	padding: 2px 18px;
+	font-size: 14px;
+	backdrop-filter: blur(4px);
+	background-color: #191d2638 !important;
+	color: #fff;
+}
+html[data-theme="flat"] ul.messages-list > div.rcx-message-divider {
+	margin: 20px !important;
+}
+
+/* chat room > header > room leader block */
+html[data-theme="flat"] div.rcx-box.rcx-box--full.room-leader {
+	display: none !important;
+}
+
+
+/*
+	------------------------ MESSAGES ------------------------
+*/
+
+/* message status (read status icon, useless.) */
+html[data-theme="flat"] div.rcx-box.rcx-box--full > i.rcx-icon.rcx-icon--name-check {
+	padding: 10px;
+	display: none;
+}
+
+/* message (general) */
+html[data-theme="flat"] .rcx-message {
+	padding: 20px 15px !important;
+	border-radius: 20px !important;
+	margin: 3px 0px !important;
+	align-self: flex-start;
+}
+
+/* message */
+html[data-theme="flat"] ul.messages-list > .rcx-message {
+	width: 98%;
+}
+/* message */
+html[data-theme="flat"] ul.messages-list > .rcx-message:before {
+	/* message body background */
+	content: " ";
+	position: absolute;
+	left: 78px;
+	top: -1px;
+	width: calc(100% - 80px);
+	height: 100%;
+	z-index: -1;
+	background-color: var(--rcx-color-surface-light);
+	border-radius: 0px;
+	border: 1px solid var(--message-border-flat-color-main);
+}
+html[data-theme="flat"] ul.messages-list > .rcx-message:focus,
+html[data-theme="flat"] ul.messages-list > .rcx-message:hover {
+	background-color: initial !important;
+}
+
+/* message (general) sequential (messages from user in a row) */
+html[data-theme="flat"] .rcx-message.rcx-message--sequential {
+	margin-top: -4px !important;
+	padding: 4px 12px !important;
+}
+html[data-theme="flat"] .rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
+}
+/* message > left container (avatar) */
+html[data-theme="flat"] .rcx-message > div:nth-child(1) {
+	width: 50px;
+}
+/* message > right container (message) */
+html[data-theme="flat"] .rcx-message > div:nth-child(2) {
+	padding-left: 20px !important;
+}
+/* message > last message in thread (useless) */
+html[data-theme="flat"] .rcx-message.rcx-message-thread {
+	display: none !important;
+}
+/* message (general) > body */
+html[data-theme="flat"] .rcx-message-body {
+	color: var(--messages-font-color-main) !important;
+}
+
+/* message > application name/size block (name of file/image/video) */
+html[data-theme="flat"] .rcx-box.rcx-box--full:has(> a[download]) {
+	margin-top: 18px !important;
+	margin-bottom: 5px !important;
+	opacity: 50%;
+}
+
+/* message > application block (file/image/video) */
+html[data-theme="flat"].rcx-box.rcx-box--full:has(> div > picture),
+html[data-theme="flat"] .rcx-message-generic-preview:has(> video) {
+	margin-bottom: 15px !important;
+	border: initial !important;
+	background-color: initial !important;
+	max-width: 40vw !important;
+}
+/* message > picture */
+html[data-theme="flat"] .rcx-message picture {
+	border: none !important;
+}
+
+/* message > thread button (thread/reply) */
+html[data-theme="flat"] .rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) {
+}
+/* message > metrics container (thread button, counter, etc.) */
+html[data-theme="flat"] .rcx-message > div:nth-child(2) > div:has(.rcx-message-metrics__content-item) .rcx-message-metrics__content-wrapper * {
+}
+html[data-theme="flat"] .rcx-message:has(.rcx-message-metrics__content-item) {
+}
+html[data-theme="flat"] .rcx-message .rcx-message-metrics__content-item {
+}
+/* message > metrics container > participants (icon + counter, useless) */
+html[data-theme="flat"] .rcx-message-metrics__item[title=Участники],
+html[data-theme="flat"] .rcx-message-metrics__item[title=Participants] {
+	display: none !important;
+}
+
+/* message > header (author) */
+html[data-theme="flat"] .rcx-message-container > .rcx-message-header > div > * {
+	padding-right: 10px !important;
+}
+/* message > body */
+html[data-theme="flat"] .rcx-message-container > .rcx-message-body {
+	padding-top: 18px !important;
+	font-size: 15px;
+}
+
+/* message > avatar */
+html[data-theme="flat"] .rcx-message-container.rcx-message-container--left > figure.rcx-avatar {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+html[data-theme="flat"] .rcx-message-container.rcx-message-container--left > figure.rcx-avatar img {
+	width: initial;
+	height: initial;
+}
+/* message > username */
+html[data-theme="flat"] span.rcx-box.rcx-box--full.rcx-message-header__username {
+	display: none;
+}
+/* message > link's */
+html[data-theme="flat"] .rcx-box.rcx-box--full.rcx-message-container a {
+	color: var(--link-color-main);
+}
+
+/* blockquote */
+html[data-theme="flat"] blockquote.rcx-box.rcx-attachment__details {
+	background-color: var(--quote-bg-color-main) !important;
+	border: 1px solid var(--quote-border-color-main) !important;
+	border-left: 8px solid var(--quote-border-color-main) !important;
+}
+html[data-theme="flat"] blockquote.rcx-box.rcx-attachment__details * {
+	color: #66676b;
+}
+
+
+/*
+		message (current user is author).
+*/
+
+
+/* message (current user) > username */
+html[data-theme="flat"] .rcx-message[data-own=true] .rcx-message-header__name {
+	/* color: #2c6dff;
+	background: #2c6dff36;
+	padding: 20px; */
+}
+
+/* message (current user) > body */
+html[data-theme="flat"] .rcx-message[data-own=true] .rcx-message-container > .rcx-message-body {
+}
+/* message (current user, sequential) > body */
+html[data-theme="flat"] .rcx-message.rcx-message--sequential[data-own=true] .rcx-message-container > .rcx-message-body {
+	padding-top: 8px !important;
+}
+/* message (current user) > name (useless on current user) */
+html[data-theme="flat"] .rcx-message[data-own=true] .rcx-message-header__wrapper .rcx-message-header__name-container {
+}
+html[data-theme="flat"] ul.messages-list > .rcx-message[data-own=true]:before {
+	/* message body background */
+	/* border-left: 4px solid #617aa0; */
+	/* border-right: 4px solid #617aa0; */
+}
+
+/* blockquote (current user blockquote) */
+html[data-theme="flat"] .rcs-message[data-own="true"] blockquote.rcx-box.rcx-attachment__details {
+	background-color: var(--quote-bg-color-mine-main) !important;
+	border: 1px solid var(--quote-border-color-main) !important;
+	border-left: 8px solid var(--quote-border-color-main) !important;
+}
+
+
+
+/*
+	------------------------ MESSAGES > REACTIONS ------------------------
+*/
+
+/* message > reaction container (whole block) */
+html[data-theme="flat"] .rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
+	margin-top: 15px;
+}
+/* message > reaction container (whole block) - sequential */
+html[data-theme="flat"] .rcx-message.rcx-message--sequential .rcx-box.rcx-box--full.rcx-message-block:has(.rcx-message-reactions__container) {
+	margin-top: 5px;
+	margin-bottom: 8px;
+}
+/* message > reaction container (single reaction div) */
+html[data-theme="flat"] .rcx-message-reactions__reaction {
+	border: none !important;
+	border-radius: 50px !important;
+	padding: 2px 8px !important;
+	--reaction-bg-color-dark: #353a43;
+	/* background-color: var(--reaction-bg-color-dark); */
+}
+/* message > reaction (single reaction div) - current user */
+html[data-theme="flat"] .rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine {
+	background-color: var(--reaction-mine-bg-color-main);
+	color: #fff;
+}
+/* message > reaction (counter) - current user */
+html[data-theme="flat"] div.rcx-message-reactions__reaction.rcx-message-reactions__reaction--mine > div.rcx-message-reactions__counter {
+	font-weight: bold !important;
+}
+/* message > reaction (icon) */
+html[data-theme="flat"] .rcx-message-reactions__emoji {
+	height: 1.4rem !important;
+	width: 1.4rem !important;
+}
+
+
+
+/*
+	------------------------ THREADS ------------------------
+*/
+
+/* thread main window (lvl 1) */
+html[data-theme="flat"] aside.rcx-box.rcx-box--full.rcx-vertical-bar {
+}
+/* thread window (lvl 1, wide extended) */
+html[data-theme="flat"] div.rcx-box.rcx-box--full.rcx-thread-view.rcx-vertical-bar {
+	border-radius: 6px;
+}
+/* thread window > background */
+html[data-theme="flat"] aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar {
+}
+/* thread window > header */
+html[data-theme="flat"] aside.rcx-box .rcx-box.rcx-thread-view.rcx-vertical-bar h3 {
+	background-color: var(--rcx-color-surface-light);
+}
+/* thread window (lvl 2) */
+html[data-theme="flat"] aside section.rcx-box.rcx-box--full {
+}
+/* thread window (lvl 3) */
+html[data-theme="flat"] aside .thread-list {
+	padding-bottom: 20px !important;
+}
+/* thread window (lvl 4) > messages list */
+html[data-theme="flat"] ul.thread {
+	display: flex;
+	flex-direction: column;
+	align-content: stretch;
+	flex-wrap: wrap;
+	align-items: stretch;
+	justify-content: flex-start;
+	overflow: hidden;
+}
+/* thread window > message li */
+html[data-theme="flat"] ul.thread > li {
+}
+/* thread window > message li (current user) */
+html[data-theme="flat"] ul.thread > li:has([data-own=true]) {
+}
+/* thread window > message */
+html[data-theme="flat"] ul.thread div.rcx-message {
+	margin: -1px !important;
+	background-color: var(--rcx-color-surface-light);
+	border-radius: 0px !important;
+	border: 1px solid var(--message-border-flat-color-main);
+}
+/* thread window > message (current user) */
+html[data-theme="flat"] ul.thread div.rcx-message[data-own=true] {
+}
+/* thread window > message sequential (messages from user in a row) > body */
+html[data-theme="flat"] ul.thread .rcx-message.rcx-message--sequential > .rcx-message-container > .rcx-message-body {
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
+}
+
+
+
+/*
+	------------------------ CHAT'S FOOTER / TOOLBAR ------------------------
+*/
+
+/* chat input text area > footer */
+html[data-theme="flat"] footer.rc-message-box.footer {
+	max-width: 100%;
+	box-shadow: 0px -2px 4px #00000012;
+}
+html[data-theme="flat"] footer.rc-message-box.footer > div:has(blockquote) {
+	margin: initial !important;
+}
+html[data-theme="flat"] footer.rc-message-box.footer > div[role="group"] {
+	border-radius: 0 !important;
+	border: none !important;
+	overflow: auto !important;
+	outline: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+	resize: none !important;
+}
+/* thread > chat input text area > footer */
+html[data-theme="flat"] aside footer.rc-message-box.footer {
+	max-width: 100%;
+	border-top: initial !important;
+	border-radius: initial !important;
+}
+/* chat input text area > toolbar */
+html[data-theme="flat"] .rcx-box.rcx-box--full[role=toolbar] {
+	background-color: #ffffff00 !important;
+}
+/* chat input text area > footer > activity block (bottom block, empty) */
+html[data-theme="flat"] .rcx-box.rcx-box--full.rc-message-box__activity-wrapper {
+	display: none;
+}
+
+
+
+/*
+	------------------------ EMOJI ------------------------
+*/
+
+/* emoji window */
+html[data-theme="flat"] .emoji-picker {
+	border-radius: 15px !important;
+	bottom: 125px !important;
+	top: unset !important;
+	left: 50% !important;
+	right: 212px !important;
+	width: 550px;
+	height: 370px;
+	transform: translateX(-50%);
+}
+/* emoji window > emoji filter bar container (category icons) */
+html[data-theme="flat"] .rcx-box.filter {
+	transform: scale(0.8) !important;
+}
+/* all emoji list container */
+html[data-theme="flat"] .emojis {
+	padding: 5px 10px !important;
+}
+/* emoji category divider (text) */
+html[data-theme="flat"] .emoji-list-category {
+	color: #73737b !important;
+}
+/* emoji list container (under every category) */
+html[data-theme="flat"] .emoji-list {
+
+}
+/* single emoji picker item (lvl 1) */
+html[data-theme="flat"] li.emoji-picker-item {
+	transform: scale(1.6);
+	margin: 6px 12px !important;
+}
+/* single emoji picker item - on hover */
+html[data-theme="flat"] .emoji-picker .emojis .emoji-list li.emoji-picker-item:hover {
+	transform: scale(200%);
+	background-color: #ddd;
+}
+/* single emoji (lvl 2) */
+html[data-theme="flat"] li.emoji-picker-item > .emoji {
+
+}
+/* emoji window > footer container (add custom emoji) */
+html[data-theme="flat"] .emoji-footer {
+
+}
+/* emoji window > footer container > link (add custom emoji) */
+html[data-theme="flat"] .emoji-footer > a.add-custom {
+	font-size: 12px !important;
+	color: cornflowerblue !important;
+	padding: 2px !important;
+}
+/* emoji window > footer container > copyright text (useless) */
+html[data-theme="flat"] .emoji-footer > div {
+	display: none !important;
+}
+
+
+
+
+/*
+	------------------------ STICKERS ------------------------
+*/
+
+html[data-theme="flat"] ul.thread div.rcx-message.is-sticker-message {
+	/* removing bg from sticker messages in thread */
+}
+html[data-theme="flat"] ul.thread div.rcx-message[data-own=true].is-sticker-message {
+	/* removing bg from sticker messages in thread */
+}
+html[data-theme="flat"] .rcx-message.is-sticker-message .rcx-message-body > div {
+	text-align: left;
+}
+html[data-theme="flat"] .rcx-message.is-sticker-message .rcx-message-header {
+	/* hide message header on sticker */
+	display: initial;
 }
