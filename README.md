@@ -15,7 +15,7 @@
  - [x] dark
 - **Theme settings**
  - [x] switch to `default` RocketChat theme
- - [ ] switch to `Flat` theme (WIP)
+ - [x] switch to `Flat` theme
  - [x] switch to `Telegram` theme
  - [x] color palette variations
 - **Chat folders**
@@ -77,10 +77,10 @@
 ![stickers_-_dark](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/cadb7abb-2363-42a7-9706-1cd7da0c86dd)
 
 ### sidebar
-- 1 - add folder 
+- 1 - add folder
 - 2 - add current chat in folder
 - 3 - remove current chat from folder
 - 4 - remove folder from sidebar
-  
+
 ![sidebar](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/7d00ef0a-0fbe-4306-a4ec-8305b7a88764)
 
