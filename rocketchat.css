@@ -1530,7 +1530,7 @@ html[data-theme="flat"] .rcx-message-generic-preview:has(> video) {
 	margin-bottom: 15px !important;
 	border: initial !important;
 	background-color: initial !important;
-	max-width: 40vw !important;
+	/* max-width: 40vw !important; */
 }
 /* message > picture */
 html[data-theme="flat"] .rcx-message picture {
