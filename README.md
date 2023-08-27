@@ -22,11 +22,12 @@
  - [x] add / remove folder
  - [x] add / remove chat in folder
  - [x] unread chats counters
+ - [x] personal chats folder
 - **Chat in sidebar**
  - [x] more noticeable highlighting on unread chats
  - [x] scaled avatars
  - [x] message formatting on extended view (coloring author)
-- **Char room / Chat messages**
+- **Chat room / Chat messages**
  - [x] new messages / threads style
  - [x] system messages style
  - [x] chat room leader in header removed
@@ -41,7 +42,6 @@
 
 ### Known issues:
  - [ ] chat management popups doesnt work in folders (even though it appears on hover)
- - [ ] no adaptation on narrow screen size (WIP)
  - [ ] there may be problems with a slower Internet connection (WIP)
 
 ### Hot ot install:
