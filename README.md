@@ -1,16 +1,13 @@
+![Peek 2023-07-30 21-16](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9b941018-18b4-423b-a464-6357a48236a3)
 
 # Telegram theme for Rocketchat
 > "Is it telegram?! No it's rocketchat :("
 
 
-![Peek 2023-07-30 21-16](https://github.com/mrFreeman-G/rocketchat-telegram-theme/assets/109005425/9b941018-18b4-423b-a464-6357a48236a3)
-
-
-
 ### FYI:  I'm more backend then frontend developer, so feel free to improve JS code.
 
 - If you dont have permissions to change css and js on server side, you can use Browser Extension [User JavaScript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) to use theme in your browser
-- works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.3.0)
+- works on Rocket.Chat 6.0.0+ server version (tested on 6.0.0 - 6.3.2)
 
 ### Current features:
 - **General telegram themes**
@@ -25,11 +22,12 @@
  - [x] add / remove folder
  - [x] add / remove chat in folder
  - [x] unread chats counters
+ - [x] personal chats folder
 - **Chat in sidebar**
  - [x] more noticeable highlighting on unread chats
  - [x] scaled avatars
  - [x] message formatting on extended view (coloring author)
-- **Char room / Chat messages**
+- **Chat room / Chat messages**
  - [x] new messages / threads style
  - [x] system messages style
  - [x] chat room leader in header removed
@@ -44,7 +42,6 @@
 
 ### Known issues:
  - [ ] chat management popups doesnt work in folders (even though it appears on hover)
- - [ ] no adaptation on narrow screen size (WIP)
  - [ ] there may be problems with a slower Internet connection (WIP)
 
 ### Hot ot install:
