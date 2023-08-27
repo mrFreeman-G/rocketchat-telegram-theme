@@ -1502,16 +1502,32 @@ html[data-theme="flat"] .rcx-message.rcx-message--sequential > .rcx-message-cont
 }
 /* message > left container (avatar) */
 html[data-theme="flat"] .rcx-message > div:nth-child(1) {
-	width: 50px;
+	/* width: 50px; */
+	padding-left: 50px;
 }
 /* message > right container (message) */
 html[data-theme="flat"] .rcx-message > div:nth-child(2) {
 	padding-left: 20px !important;
 }
+
 /* message > last message in thread (useless) */
 html[data-theme="flat"] .rcx-message.rcx-message-thread {
+	/* display: none !important; */
+}
+html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread {
+	width: 85%;
+}
+html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread figure.rcx-avatar {
+	width: 20px;
+	height: 20px;
+}
+html[data-theme="flat"] ul.messages-list >.rcx-message.rcx-message-thread > div:nth-child(1) {
+	padding-left: initial;
+}
+html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread:before {
 	display: none !important;
 }
+
 /* message (general) > body */
 html[data-theme="flat"] .rcx-message-body {
 	color: var(--messages-font-color-main) !important;
