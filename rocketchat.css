@@ -1,7 +1,5 @@
 :root {
-	--sidebar-width: 400px;
 	--sidebar-folders-width: 85px;
-
 
 	--bg-image-1: url(https://blog.1a23.com/wp-content/uploads/sites/2/2020/02/pattern_03-150x150.png);
 	--bg-image-2: url(https://w0.peakpx.com/wallpaper/154/372/HD-wallpaper-telegram-background-whatsapp-creative-android-pattern-texture-abstract.jpg);
@@ -183,14 +181,6 @@ html[data-palette-dark="palette-darker"] {
 	--bg-gradient-dark: var(--bg-gradient-darker-tg);
 
 }
-
-/*
-html[data-theme="telegram"]
-html[data-bg="bg-1"]
-html[data-palette-light="palette-2"]
-html[data-palette-dark="palette-2"]
-*/
-
 
 
 
@@ -901,7 +891,7 @@ span.rcx-message__emoji.emoji.rcx-message__emoji--big[style*="background-image"]
 /* sidebar main container */
 div#sidebar-region {
 		max-width: 400px !important;
-		flex: 0 0 var(--sidebar-width) !important;
+		/* flex: 0 0 var(--sidebar-width) !important; */
 }
 
 /* sidebar > items padding's */
@@ -1715,7 +1705,6 @@ html[data-theme="flat"] ul.thread {
 	display: flex;
 	flex-direction: column;
 	align-content: stretch;
-	/* flex-wrap: wrap; */
 	flex-wrap: nowrap;
 	align-items: stretch;
 	justify-content: flex-start;

@@ -708,13 +708,17 @@ async function setupNavbar(navbarItemsContainer) {
 	navbarItemsContainer.setAttribute("folder-label-area", allChatsLabel);
 
 	const sidebarWidth = getComputedStyle(root).getPropertyValue("--sidebar-width");
+	const sidebarWidthMd = getComputedStyle(root).getPropertyValue("--sidebar-md-width");
+	const sidebarWidthLg = getComputedStyle(root).getPropertyValue("--sidebar-lg-width");
 	const sidebarFoldersWidth = getComputedStyle(root).getPropertyValue("--sidebar-folders-width");
 
 	// set sidebar width
 	const newSidebarWidth = `calc(${sidebarWidth} + ${sidebarFoldersWidth})`;
-	if (sidebarWidth != newSidebarWidth) {
-		root.style.setProperty("--sidebar-width", newSidebarWidth);
-	}
+	const newSidebarWidthMd = `calc(${sidebarWidthMd} + ${sidebarFoldersWidth})`;
+	const newSidebarWidthLg = `calc(${sidebarWidthLg} + ${sidebarFoldersWidth})`;
+	root.style.setProperty("--sidebar-width", newSidebarWidth);
+	root.style.setProperty("--sidebar-md-width", newSidebarWidthMd);
+	root.style.setProperty("--sidebar-lg-width", newSidebarWidthLg);
 
 	// setup folders sidebar container
 	const chatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
