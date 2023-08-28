@@ -1715,7 +1715,8 @@ html[data-theme="flat"] ul.thread {
 	display: flex;
 	flex-direction: column;
 	align-content: stretch;
-	flex-wrap: wrap;
+	/* flex-wrap: wrap; */
+	flex-wrap: nowrap;
 	align-items: stretch;
 	justify-content: flex-start;
 	overflow: hidden;
