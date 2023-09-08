@@ -1,26 +1,21 @@
-/*
-	-- -- -- -- -- -- -- -- -- -- -- --
-	local use (user from browser extension)
-	-- -- -- -- -- -- -- -- -- -- -- --
-*/
+/* -- -- -- -- -- -- -- -- -- -- -- --
+local use (user from browser extension)
+-- -- -- -- -- -- -- -- -- -- -- -- */
 const isLocal = false; // true
+const defaultTheme = "telegram";  // rocketchat / flat / telegram
 
 
 if (isLocal) {
-	/*
-		-- -- -- -- -- -- -- -- -- -- -- --
-		FOR BROWSER USE.
-		local user must wait until DOM loaded.
-		-- -- -- -- -- -- -- -- -- -- -- --
-	*/
+	/* -- -- -- -- -- -- -- -- -- -- -- --
+	FOR BROWSER USE.
+	local user must wait until DOM loaded.
+	-- -- -- -- -- -- -- -- -- -- -- -- */
 	window.addEventListener("DOMContentLoaded", start);
 } else {
-	/*
-		-- -- -- -- -- -- -- -- -- -- -- --
-		FOR SERVER USE.
-		server loads JS in already loaded DOM.
-		-- -- -- -- -- -- -- -- -- -- -- --
-	*/
+	/* -- -- -- -- -- -- -- -- -- -- -- --
+	FOR SERVER USE.
+	server loads JS in already loaded DOM.
+	-- -- -- -- -- -- -- -- -- -- -- -- */
 	start();
 }
 
@@ -28,12 +23,13 @@ console.log(' --- CUSTOM JS LOADED --- ');
 
 
 const root = document.documentElement;
+const allChatsLabel = "all chats";
+const personalChatsLabel = "personal";
+const settingsLabel = "settings";
+const reservedNames = [allChatsLabel, settingsLabel, personalChatsLabel];
+const chatFolders = getLocalStorageChatFolders();
 const preparedFolders = {};
 const generalFolderUnreadChats = {};
-const chatFolders = getLocalStorageChatFolders();
-const allChatsLabel = "All chats";
-const personalChatsLabel = "Personal";
-const reservedNames = [allChatsLabel.toLowerCase(), "settings", "personal"];
 let loaderTimeout;
 
 
@@ -55,11 +51,12 @@ function getLocalStorageChatFolders() {
 }
 
 function setLocalStorageChatFolder(folderName) {
+	let formattedFolderName = folderName.trim();
 	let chatFolders = getLocalStorageChatFolders();
-	if (reservedNames.indexOf(folderName.toLowerCase()) !== -1) {
+	if (reservedNames.indexOf(formattedFolderName.toLowerCase()) !== -1) {
 		return false;
 	}
-	chatFolders[folderName] = [];
+	chatFolders[formattedFolderName] = [];
 	localStorage.setItem("chatFolders", JSON.stringify(chatFolders));
 	return true;
 }
@@ -98,7 +95,7 @@ function getLocalStorageThemeSettings() {
 	let themeSettings = JSON.parse(localStorage.getItem("themeSettings"));
 	if (!themeSettings) {
 		themeSettings = {
-			"theme": "telegram",
+			"theme": defaultTheme,
 			"bg": "bg-1",
 			"palette-light": "palette-green",
 			"palette-dark": "palette-dark"
@@ -577,7 +574,9 @@ async function setupChatsLoader() {
 	loaderDiv.innerHTML = "<div class='chat-loader'></div>";
 	await delay(1000);
 	const mainContainer = document.querySelector("main.rcx-box--full");
-	mainContainer.before(loaderDiv);
+	if (mainContainer) {
+		mainContainer.before(loaderDiv);
+	}
 }
 
 
@@ -674,10 +673,13 @@ function formatStickerMessages() {
 
 function handleChatLoader() {
 	let loaderDiv = document.querySelector(".chat-area-loader");
+	if (!loaderDiv) return;
 	let mainContainerCurrent = document.querySelector("main.rcx-box--full");
 	if (mainContainerCurrent) {
 		let roomIsLoaded = mainContainerCurrent.getAttribute("data-qa-rc-room");
-		let isHomePage = mainContainerCurrent.getAttribute("data-qa");
+		let pageNotFound = mainContainerCurrent.querySelector(":has( .rcx-states)");
+		let blankHomePage = mainContainerCurrent.getAttribute("data-qa");
+		let homePage = document.querySelector('section[data-qa="page-home"]');
 		if (roomIsLoaded) {
 			if (!loaderTimeout)
 				loaderTimeout = setTimeout(() => {
@@ -686,11 +688,11 @@ function handleChatLoader() {
 					loaderDiv.style.display = "none";
 					loaderTimeout = null;
 				}, 1000);
-		} else if (isHomePage) {
-			loaderDiv.style.display = "none";
-		} else {
-			loaderDiv.style.display = "block";
-		}
+		} else if (blankHomePage || homePage || pageNotFound) {
+      loaderDiv.style.display = "none";
+    } else {
+      loaderDiv.style.display = "block";
+    }
 	}
 }
 
@@ -764,8 +766,8 @@ async function setupNavbar(navbarItemsContainer) {
 	setupFolderArea(navbarItemsContainer, personalChatsLabel, personalChats);
 
 	// setup "Settings" folder & area.
-	setupThemeSettingsButton(foldersContainer, "settings");
-	setupThemeSettingsArea(navbarItemsContainer, "settings");
+	setupThemeSettingsButton(foldersContainer, settingsLabel);
+	setupThemeSettingsArea(navbarItemsContainer, settingsLabel);
 }
 
 
@@ -926,6 +928,13 @@ async function start() {
 				startObserveFolderItems(navbarItemsContainer, true);
 			}
 		}
+	}
+
+	// TODO: refactoring.
+	let pushState = history.pushState;
+	history.pushState = function () {
+		pushState.apply(history, arguments);
+		handleChatLoader();
 	}
 
 }
