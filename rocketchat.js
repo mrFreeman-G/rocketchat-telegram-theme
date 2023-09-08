@@ -205,10 +205,12 @@ function handlePopups() {
 
 
 function changeFolder(folderName) {
-	const mainFolderArea = document.querySelector(`div[folder-label-area='${allChatsLabel}']`);
+	// scroll main section on top to listen events
+	const mainFolderArea = document.querySelector("div[style*='box-sizing']");
 	mainFolderArea.style.paddingTop = "0px";
 	mainFolderArea.parentNode.parentNode.scrollTop = 0;
 
+	// toggle folder icon selection
 	const allFolderIcons = document.querySelectorAll("div[folder-label]");
 	const folderIcon = document.querySelector(`div[folder-label="${folderName}"]`);
 	allFolderIcons.forEach((element) => {
@@ -217,13 +219,11 @@ function changeFolder(folderName) {
 	folderIcon.classList.add("folder-selected");
 
 	const allFolderAreas = document.querySelectorAll("div[folder-label-area]");
-	const folderArea = document.querySelector(
-		`div[folder-label-area="${folderName}"]`
-	);
+	const selectedFolderArea = document.querySelector(`div[folder-label-area="${folderName}"]`);
 	allFolderAreas.forEach((element) => {
 		element.style.display = "none";
 	});
-	folderArea.style.display = "block";
+	selectedFolderArea.style.display = "block";
 }
 
 
@@ -254,13 +254,16 @@ async function parseNavbarItems(navbarItemsContainer) {
 	});
 
 	// set container size back.
-	navbarItemsContainerParent.style.height = totalSidebarHeight + "px";
+	// TODO: tmp not resetting size.
+	// navbarItemsContainerParent.style.height = totalSidebarHeight + "px";
 
 	return navBarAllItems;
 }
 
 
-function setupFolder(foldersContainer, folderName) {
+function setupFolderButton(foldersContainer, folderName) {
+	if (folderName == settingsLabel) return setupThemeSettingsButton(foldersContainer);;
+
 	const folderDiv = document.createElement("div");
 	const folderNameP = document.createElement("p");
 	folderNameP.innerHTML = folderName;
@@ -268,12 +271,15 @@ function setupFolder(foldersContainer, folderName) {
 	folderUnreadedChatsCounter.className = "unread-chats-counter";
 
 	let iconSvg;
-	if (folderName == allChatsLabel) {
-		iconSvg = getChatsIconSvg();
-	} else if (folderName == personalChatsLabel) {
-		iconSvg = getPersonalIconSvg();
-	} else {
-		iconSvg = getFolderIconSvg();
+	switch (folderName) {
+		case allChatsLabel:
+			iconSvg = getChatsIconSvg();
+			break;
+		case personalChatsLabel:
+			iconSvg = getPersonalIconSvg();
+			break;
+		default:
+			iconSvg = getFolderIconSvg();
 	}
 	folderDiv.appendChild(iconSvg);
 
@@ -299,16 +305,16 @@ function setupFolder(foldersContainer, folderName) {
 }
 
 
-function setupThemeSettingsButton(foldersContainer, buttonName) {
+function setupThemeSettingsButton(foldersContainer) {
 	const settingsDiv = document.createElement("div");
 	const settingsNameP = document.createElement("p");
-	settingsNameP.innerHTML = buttonName;
+	settingsNameP.innerHTML = settingsLabel;
 
 	const iconSvg = getSettingsIconSvg();
 	settingsDiv.appendChild(iconSvg);
 
 	settingsDiv.classList.add("sidebar-folder");
-	settingsDiv.setAttribute("folder-label", buttonName);
+	settingsDiv.setAttribute("folder-label", settingsLabel);
 	settingsDiv.appendChild(settingsNameP);
 	settingsDiv.addEventListener("click", handleChangeFolderEvent);
 
@@ -340,8 +346,17 @@ function chatsUnreadStatusDataDivSetup() {
 }
 
 
-function setupFolderArea(navbarItemsContainer, folderName, items) {
-	const navbarItemsContainerParent = navbarItemsContainer.parentNode;
+function setupAllChatsFolderArea() {
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
+	const defaultFolderArea = defaultChatsContainer.querySelector('div:has( [tabindex="0"])');
+	defaultFolderArea.setAttribute("folder-label-area", allChatsLabel);
+}
+
+
+function setupFolderArea(folderName, items) {
+	if (folderName == allChatsLabel) return setupAllChatsFolderArea();
+	if (folderName == settingsLabel) return setupThemeSettingsArea();
+
 	const folderItemsContainer = document.createElement("div");
 	folderItemsContainer.classList.add("sidebar-folder-container");
 	folderItemsContainer.setAttribute("folder-label-area", folderName);
@@ -360,15 +375,16 @@ function setupFolderArea(navbarItemsContainer, folderName, items) {
 		folderItemsContainer.prepend(manageFolderDiv);
 	}
 
-	navbarItemsContainerParent.append(folderItemsContainer);
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
+	defaultChatsContainer.append(folderItemsContainer);
 }
 
 
-function setupThemeSettingsArea(navbarItemsContainer, folderName) {
-	const navbarItemsContainerParent = navbarItemsContainer.parentNode;
+function setupThemeSettingsArea() {
 	const folderItemsContainer = document.createElement("div");
 	folderItemsContainer.style.display = "none";
-	folderItemsContainer.setAttribute("folder-label-area", folderName);
+	folderItemsContainer.classList.add("sidebar-folder-container");
+	folderItemsContainer.setAttribute("folder-label-area", settingsLabel);
 
 	const themeSettings = getLocalStorageThemeSettings();
 	updateThemeSettingsHtml(themeSettings);
@@ -453,7 +469,9 @@ function setupThemeSettingsArea(navbarItemsContainer, folderName) {
 		</form>
 	`;
 	folderItemsContainer.innerHTML = addFolderFormHtml + settingsFormHtml;
-	navbarItemsContainerParent.append(folderItemsContainer);
+
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
+	defaultChatsContainer.append(folderItemsContainer);
 
 	// ----------- Settings form form handler -----------
 	const settingsForm = document.querySelector("#form-theme-settings");
@@ -480,8 +498,8 @@ function setupThemeSettingsArea(navbarItemsContainer, folderName) {
 				addFolderForm.reset();
 				return;
 			}
-			setupFolder(foldersContainer, addFolderInput.value);
-			setupFolderArea(navbarItemsContainer, addFolderInput.value, []);
+			setupFolderButton(foldersContainer, addFolderInput.value);
+			setupFolderArea(addFolderInput.value, []);
 			addFolderInput.value == "";
 			addFolderForm.reset();
 		}
@@ -707,8 +725,6 @@ function loaderAndStickersHandler() {
 
 
 async function setupNavbar(navbarItemsContainer) {
-	navbarItemsContainer.setAttribute("folder-label-area", allChatsLabel);
-
 	const sidebarWidth = getComputedStyle(root).getPropertyValue("--sidebar-width");
 	const sidebarWidthMd = getComputedStyle(root).getPropertyValue("--sidebar-md-width");
 	const sidebarWidthLg = getComputedStyle(root).getPropertyValue("--sidebar-lg-width");
@@ -753,21 +769,22 @@ async function setupNavbar(navbarItemsContainer) {
 
 	// setup folders.
 	for (let [folderName, items] of Object.entries(preparedFolders)) {
-		setupFolder(foldersContainer, folderName);
-		setupFolderArea(navbarItemsContainer, folderName, items);
+		setupFolderButton(foldersContainer, folderName);
+		setupFolderArea(folderName, items);
 	}
 
 	// setup "all" folder.
-	setupFolder(foldersContainer, allChatsLabel);
+	setupFolderButton(foldersContainer, allChatsLabel);
+	setupFolderArea(allChatsLabel, null);
 	navbarItems.forEach((element) => { formatExtendedNavbarItems(element) });
 
 	// setup "personal" folder.
-	setupFolder(foldersContainer, personalChatsLabel);
-	setupFolderArea(navbarItemsContainer, personalChatsLabel, personalChats);
+	setupFolderButton(foldersContainer, personalChatsLabel);
+	setupFolderArea(personalChatsLabel, personalChats);
 
 	// setup "Settings" folder & area.
-	setupThemeSettingsButton(foldersContainer, settingsLabel);
-	setupThemeSettingsArea(navbarItemsContainer, settingsLabel);
+	setupFolderButton(foldersContainer, settingsLabel);
+	setupFolderArea(settingsLabel, null);
 }
 
 
