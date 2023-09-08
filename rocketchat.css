@@ -932,7 +932,7 @@ div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed a.rc
 }
 div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended figure.rcx-avatar {
 	/* extended */
-	--size: 50px;
+	--size: 55px;
 	width: var(--size);
 	height: var(--size);
 	overflow: hidden;
@@ -1500,19 +1500,23 @@ html[data-theme="flat"] .rcx-message > div:nth-child(2) {
 	padding-left: 20px !important;
 }
 
-/* message > last message in thread (useless) */
+/* message > last message in thread */
 html[data-theme="flat"] .rcx-message.rcx-message-thread {
-	/* display: none !important; */
+}
+html[data-theme="flat"] .rcx-message.rcx-message-thread .rcx-message-thread__row:has( .rcx-message-thread__icon) {
+	margin-top: 5px;
+	padding-left: 25px;
+}
+html[data-theme="flat"] .rcx-message.rcx-message-thread > div:nth-child(2) {
+	padding-left: 50px !important;
 }
 html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread {
 	width: 85%;
+	padding: 0px 0px 2px 20px !important;
 }
 html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread figure.rcx-avatar {
 	width: 20px;
 	height: 20px;
-}
-html[data-theme="flat"] ul.messages-list >.rcx-message.rcx-message-thread > div:nth-child(1) {
-	padding-left: initial;
 }
 html[data-theme="flat"] ul.messages-list > .rcx-message.rcx-message-thread:before {
 	display: none !important;
@@ -1755,6 +1759,10 @@ html[data-theme="flat"] footer.rc-message-box.footer > div[role="group"] {
 	-moz-box-shadow: none !important;
 	box-shadow: none !important;
 	resize: none !important;
+}
+/* thread > chat input text area > footer > checbox */
+html[data-theme="flat"] aside footer.rc-message-box.footer div.rcx-field {
+	padding: 0 10px;
 }
 /* thread > chat input text area > footer */
 html[data-theme="flat"] aside footer.rc-message-box.footer {
