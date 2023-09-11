@@ -32,6 +32,9 @@ const preparedFolders = {};
 const generalFolderUnreadChats = {};
 let loaderTimeout;
 
+const buttonDarkClassName = "theme-dark-button";
+const buttonClassName = "rcx-box rcx-box--full rcx-box--animated rcx-button--small rcx-button--primary rcx-button add-folder-button";
+
 
 function delay(time) {
 	return new Promise((resolve) => setTimeout(resolve, time));
@@ -201,6 +204,59 @@ function handlePopups() {
 			if (popupButton != p) p.classList.remove("show");
 		});
 	});
+}
+
+
+function exportSettingsHandler() {
+  const exportSettingsLink = document.getElementById("export-settings-link");
+  exportSettingsLink.addEventListener("click", function (e) {
+    e.preventDefault();
+    const settings = {
+      foldersSettings: getLocalStorageChatFolders(),
+      themeSettings: getLocalStorageThemeSettings(),
+    };
+    const link = document.createElement("a");
+    link.href = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(settings))}`;
+    link.download = "settings.json";
+    link.click();
+  });
+}
+
+
+function importSettingsHandler() {
+  const importSettingsForm = document.getElementById("import-settings-form");
+  importSettingsForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const files = document.getElementById("selectFiles").files;
+    if (files.length <= 0) {
+      alert("Choose settings file to upload.");
+      return false;
+    }
+    // read file.
+    const fr = new FileReader();
+    fr.onload = function (e) {
+      let settings;
+      try {
+        settings = JSON.parse(e.target.result);
+        if (settings["foldersSettings"] === undefined) throw new Error("Incorrect settings file.");
+        if (settings["themeSettings"] === undefined) throw new Error("Incorrect settings file.");
+      } catch (err) {
+        alert("Incorrect settings file.");
+        return false;
+      }
+      // save new settings.
+      setLocalStorageThemeSettings(settings["themeSettings"]);
+      for (let [folderName, chatsList] of Object.entries(settings["foldersSettings"])) {
+        setLocalStorageChatFolder(folderName);
+        for (chatName of chatsList) {
+          addChatToLocalStorageChatFolder(folderName, chatName);
+        }
+      }
+      // reload window.
+      location.reload();
+    };
+    fr.readAsText(files.item(0));
+  });
 }
 
 
@@ -381,10 +437,10 @@ function setupFolderArea(folderName, items) {
 
 
 function setupThemeSettingsArea() {
-	const folderItemsContainer = document.createElement("div");
-	folderItemsContainer.style.display = "none";
-	folderItemsContainer.classList.add("sidebar-folder-container");
-	folderItemsContainer.setAttribute("folder-label-area", settingsLabel);
+	const settingsContainer = document.createElement("div");
+	settingsContainer.style.display = "none";
+	settingsContainer.classList.add("sidebar-folder-container");
+	settingsContainer.setAttribute("folder-label-area", settingsLabel);
 
 	const themeSettings = getLocalStorageThemeSettings();
 	updateThemeSettingsHtml(themeSettings);
@@ -397,7 +453,7 @@ function setupThemeSettingsArea() {
 				<input placeholder="Folder name" name="folder-name" class="add-folder-input" id="add-folder-input">
 			</div>
 			<div>
-				<input type="submit" value="Add folder" class="rcx-box rcx-box--full rcx-box--animated rcx-button--small rcx-button--primary rcx-button add-folder-button">
+				<input type="submit" value="Add folder" class="${buttonDarkClassName} ${buttonClassName} add-folder-button">
 			</div>
 		</form>
 	`;
@@ -468,10 +524,27 @@ function setupThemeSettingsArea() {
 			</fieldset>
 		</form>
 	`;
-	folderItemsContainer.innerHTML = addFolderFormHtml + settingsFormHtml;
+
+  let exportImportSettingsFormHtml = `
+  	<form id="import-settings-form">
+  		<h2>Export settings</h2>
+  		<a href="#" id="export-settings-link" class="${buttonClassName} ${buttonDarkClassName}">Export settings file</a>
+      <br>
+  		<h2>Import settings</h2>
+      <input type="file" id="selectFiles" value="Import" />
+      <button id="import" class="${buttonClassName} ${buttonDarkClassName}">Import settings file</button>
+  	</form>
+  `;
+
+	settingsContainer.innerHTML += addFolderFormHtml;
+	settingsContainer.innerHTML += settingsFormHtml;
+	settingsContainer.innerHTML += exportImportSettingsFormHtml;
 
 	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
-	defaultChatsContainer.append(folderItemsContainer);
+	defaultChatsContainer.append(settingsContainer);
+
+  exportSettingsHandler();
+  importSettingsHandler();
 
 	// ----------- Settings form form handler -----------
 	const settingsForm = document.querySelector("#form-theme-settings");
@@ -805,6 +878,17 @@ function countFolderUnreadedChats(folderContainer, isGeneralFolder) {
 	// set counter
 	let folderName = isGeneralFolder ? allChatsLabel : folderContainer.getAttribute("folder-label-area");
 	let folderBadge = document.querySelector(`div[folder-label="${folderName}"] span.unread-chats-counter`);
+
+
+
+
+  // FIXME
+  if (!folderBadge) return;
+
+
+
+
+
 	if (folderUnreadedChats == 0) {
 		folderBadge.style.display = "none";
 	} else {

@@ -189,6 +189,13 @@ html[data-palette-dark="palette-darker"] {
 */
 
 /* buttons (general) */
+.theme-dark-button {
+    /* margin: 0 auto !important; */
+    padding: 5px 20px !important;
+    background-color: #54657c !important;
+    border-color: #566482 !important;
+}
+
 button.rcx-button--primary {
 	background-color: var(--button-bg-color-main);
 	border: none;
@@ -1308,6 +1315,13 @@ p.add-folder-button {
 [folder-label-area="settings"] form input {
 	margin-right: 6px;
 	text-align: center;
+}
+[folder-label-area="settings"] form input[type="file"] {
+    background-color: #fff;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: none;
+    padding: 4px;
 }
 [folder-label-area="settings"] form .big-radio {
 	background-color: #8bdcff17;
