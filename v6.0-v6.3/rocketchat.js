@@ -95,24 +95,16 @@ function removeChatFromLocalStorageChatFolder(folderName, chatName) {
 }
 
 function getLocalStorageThemeSettings() {
-  defaultThemeSettings = {
-    "theme": defaultTheme,
-    "bg": "bg-1",
-    "palette-light": "palette-green",
-    "palette-dark": "palette-dark",
-    "messages-background-opacity": 100
-  };
 	let themeSettings = JSON.parse(localStorage.getItem("themeSettings"));
 	if (!themeSettings) {
-		themeSettings = defaultThemeSettings;
+		themeSettings = {
+			"theme": defaultTheme,
+			"bg": "bg-1",
+			"palette-light": "palette-green",
+			"palette-dark": "palette-dark"
+		};
 		localStorage.setItem("themeSettings", JSON.stringify(themeSettings));
 	}
-  for (const [key, value] of Object.entries(defaultThemeSettings)) {
-    if (!themeSettings.hasOwnProperty(key)) {
-      themeSettings[key] = value;
-		  localStorage.setItem("themeSettings", JSON.stringify(themeSettings));
-    }
-  }
 	return themeSettings;
 }
 
@@ -129,12 +121,8 @@ function updateThemeSettingsHtml(data) {
 	root.setAttribute("data-bg", data["bg"]);
 	root.setAttribute("data-palette-light", data["palette-light"]);
 	root.setAttribute("data-palette-dark", data["palette-dark"]);
-	root.setAttribute("data-bg-opacity-light", data["bg-opacity-light"]);
-	root.setAttribute("data-bg-opacity-dark", data["bg-opacity-dark"]);
-  if (data["messages-background-opacity"]) {
-    root.style.setProperty("--messages-background-opacity", data["messages-background-opacity"] / 100);
-  }
-  console.debug("Theme settings updated.");
+	root.setAttribute("data-opacity-light", data["opacity-light"]);
+	root.setAttribute("data-opacity-dark", data["opacity-dark"]);
 }
 
 function getFolderIconSvg() {
@@ -415,7 +403,7 @@ function chatsUnreadStatusDataDivSetup() {
 
 
 function setupAllChatsFolderArea() {
-	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="navigation"]');
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
 	const defaultFolderArea = defaultChatsContainer.querySelector('div:has( [tabindex="0"])');
 	defaultFolderArea.setAttribute("folder-label-area", allChatsLabel);
 }
@@ -429,7 +417,7 @@ function setupFolderArea(folderName, items) {
 	folderItemsContainer.classList.add("sidebar-folder-container");
 	folderItemsContainer.setAttribute("folder-label-area", folderName);
 
-	let html = "";
+	html = "";
 	for (let item of items) {
 		item = formatExtendedNavbarItems(item);
 		html += item.outerHTML;
@@ -443,7 +431,7 @@ function setupFolderArea(folderName, items) {
 		folderItemsContainer.prepend(manageFolderDiv);
 	}
 
-	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="navigation"]');
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
 	defaultChatsContainer.append(folderItemsContainer);
 }
 
@@ -457,7 +445,6 @@ function setupThemeSettingsArea() {
 	const themeSettings = getLocalStorageThemeSettings();
 	updateThemeSettingsHtml(themeSettings);
 	const checked = (param, value) => { return themeSettings[param] == value ? 'checked="checked"' : "" }
-	const getThemeParam = (param, defaultValue) => { return themeSettings[param] ? themeSettings[param] : defaultValue }
 
 	let addFolderFormHtml = `
 		<form class="add-folder-form" id="add-folder-form" autocomplete="off">
@@ -522,10 +509,6 @@ function setupThemeSettingsArea() {
 					<input type="radio" id="palette-light-2" name="palette-light" value="palette-blue" ${checked("palette-light", "palette-blue")}/>
 					<label for="palette-light-2">Palette blue</label>
 				</div>
-				<div>
-					<input type="radio" id="palette-light-3" name="palette-light" value="palette-orange" ${checked("palette-light", "palette-orange")}/>
-					<label for="palette-light-3">Palette orange</label>
-				</div>
 			</fieldset>
 
 			<fieldset>
@@ -539,21 +522,6 @@ function setupThemeSettingsArea() {
 					<label for="palette-dark-2">Palette darker</label>
 				</div>
 			</fieldset>
-
-      <fieldset>
-        <legend>Messages background opacity</legend>
-        <div style="justify-content: center;">
-          <input
-            style="width: 100%;"
-            type="range"
-            min="50"
-            max="100"
-            value="${getThemeParam('messages-background-opacity', 100)}"
-            name="messages-background-opacity"
-            id="messages-background-opacity"
-          >
-        </div>
-      </fieldset>
 		</form>
 	`;
 
@@ -572,23 +540,21 @@ function setupThemeSettingsArea() {
 	settingsContainer.innerHTML += settingsFormHtml;
 	settingsContainer.innerHTML += exportImportSettingsFormHtml;
 
-	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="navigation"]');
+	const defaultChatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
 	defaultChatsContainer.append(settingsContainer);
 
   exportSettingsHandler();
   importSettingsHandler();
 
-	// ----------- Settings form handler -----------
+	// ----------- Settings form form handler -----------
 	const settingsForm = document.querySelector("#form-theme-settings");
 	settingsForm.addEventListener("change", (e) => {
 		e.preventDefault();
 		const data = Object.fromEntries(new FormData(settingsForm).entries());
-    console.debug(" --- settings form data --- ");
-    console.debug(data);
 		setLocalStorageThemeSettings(data);
 		updateThemeSettingsHtml(data);
 	});
-	// ----------- /Settings form handler -----------
+	// ----------- /Settings form form handler -----------
 
 	// ----------- Add folder form handler -----------
 	const foldersContainer = document.querySelector("div.sidebar-folders");
@@ -655,15 +621,12 @@ function setupFolderManageButtons() {
 	addCurrentChatButton.id = "add-chat";
 	// addCurrentChatButton.innerHTML = "Add current chat";
 	addCurrentChatButton.innerHTML = "+";
-	addCurrentChatButton.label = "+";
 	deleteCurrentChatButton.id = "delete-chat";
 	// deleteCurrentChatButton.innerHTML = "Remove current chat";
 	deleteCurrentChatButton.innerHTML = "-";
-	deleteCurrentChatButton.label = "-";
 	deleteCurrentFolderButton.id = "delete-folder";
 	// deleteCurrentFolderButton.innerHTML = "Remove folder";
 	deleteCurrentFolderButton.innerHTML = "x";
-	deleteCurrentFolderButton.label = "x";
 	[addCurrentChatButton, deleteCurrentChatButton, deleteCurrentFolderButton].forEach((button) => {
 		button.className = "rcx-box rcx-box--full rcx-button--small rcx-button--primary rcx-button";
 		manageFolderDiv.append(button);
@@ -839,20 +802,18 @@ async function setupNavbar(navbarItemsContainer) {
 	const sidebarWidthMd = getComputedStyle(root).getPropertyValue("--sidebar-md-width");
 	const sidebarWidthLg = getComputedStyle(root).getPropertyValue("--sidebar-lg-width");
 	const sidebarFoldersWidth = getComputedStyle(root).getPropertyValue("--sidebar-folders-width");
-	const sidebarAdditionalWidth = 0;  // TODO
-	const sidebarAdditionalWidthMd = 75;  // TODO
-	const sidebarAdditionalWidthLg = 155;  // TODO
 
 	// set sidebar width
-	const newSidebarWidth = `calc(calc(${sidebarWidth} + ${sidebarFoldersWidth}) + ${sidebarAdditionalWidth}px)`;
-	const newSidebarWidthMd = `calc(calc(${sidebarWidthMd} + ${sidebarFoldersWidth}) + ${sidebarAdditionalWidthMd}px)`;
-	const newSidebarWidthLg = `calc(calc(${sidebarWidthLg} + ${sidebarFoldersWidth}) + ${sidebarAdditionalWidthLg}px)`;
+	const newSidebarWidth = `calc(${sidebarWidth} + ${sidebarFoldersWidth})`;
+	const newSidebarWidthMd = `calc(${sidebarWidthMd} + ${sidebarFoldersWidth})`;
+	const newSidebarWidthLg = `calc(${sidebarWidthLg} + ${sidebarFoldersWidth})`;
 	root.style.setProperty("--sidebar-width", newSidebarWidth);
 	root.style.setProperty("--sidebar-md-width", newSidebarWidthMd);
 	root.style.setProperty("--sidebar-lg-width", newSidebarWidthLg);
 
 	// setup folders sidebar container
-	const chatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="navigation"]');
+	const chatsContainer = document.querySelector('nav.rcx-sidebar div[aria-label][role="region"]');
+	// const channelsContainer = document.querySelector("nav.rcx-sidebar div[aria-label='Каналы']");
 	const foldersIsReady = chatsContainer.querySelector(".sidebar-folders");
 	if (foldersIsReady) return;
 
@@ -1018,15 +979,13 @@ function startObserveFolderItems(folderItemsContainer, isGeneralFolder) {
 
 
 function matchPalette(paletteElem) {
-  const darkPaletteLengthMin = 6000;  // new
-  // const darkPaletteLength = 200;  // old
-	if (paletteElem && paletteElem.innerHTML.length > darkPaletteLengthMin) {
-    // dark theme
-    root.classList.add("dark-theme");
-  } else {
-    // light theme
-    root.classList.remove("dark-theme");
-  }
+	if (paletteElem && paletteElem.innerHTML.length > 200) {
+		// dark theme
+		root.classList.add("dark-theme");
+	} else {
+		// light theme
+		root.classList.remove("dark-theme");
+	}
 }
 
 
