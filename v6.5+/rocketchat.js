@@ -863,18 +863,30 @@ async function setupNavbar(navbarItemsContainer) {
 	// setup items
 	const personalChats = [];
 	const navbarItems = await parseNavbarItems(navbarItemsContainer);
+
+  if (Object.keys(chatFolders).length === 0) {
+    /* initial start - no chatFolders exists yet. */
+		for (let item of navbarItems) {
+      // prepare personal chats
+      let elemHref = item.firstChild.getAttribute("href");
+      if (elemHref.indexOf("direct/") !== -1 && personalChats.indexOf(item) === -1) {
+        personalChats.push(item);
+      }
+    }
+  }
+
 	for (let [folderName, itemLabels] of Object.entries(chatFolders)) {
 		preparedFolders[folderName] = [];
 		for (let item of navbarItems) {
 			// prepare folders chats
 			let elemAriaLabel = item.firstChild.getAttribute("aria-label");
 			if (itemLabels.includes(elemAriaLabel)) {
-				preparedFolders[folderName].push(item.cloneNode(true));
+        preparedFolders[folderName].push(item.cloneNode(true));
 			}
 			// prepare personal chats
 			let elemHref = item.firstChild.getAttribute("href");
 			if (elemHref.indexOf("direct/") !== -1 && personalChats.indexOf(item) === -1) {
-				personalChats.push(item);
+        personalChats.push(item);
 			}
 		}
 	}

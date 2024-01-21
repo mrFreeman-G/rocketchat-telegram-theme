@@ -439,8 +439,8 @@ html[data-theme="telegram"] .rcx-message {
 
 /* message */
 html[data-theme="telegram"] ul.messages-list > .rcx-message {
-	max-width: 1080px;
-	min-width: 420px;
+	max-width: 900px;
+	min-width: 320px;
 }
 /* message */
 html[data-theme="telegram"] ul.messages-list > .rcx-message:before-OLD-STYLE {
@@ -599,7 +599,7 @@ html[data-theme="telegram"] .rcx-message-generic-preview:has(> video) {
 	margin-bottom: 15px !important;
 	border: initial !important;
 	background-color: initial !important;
-	max-width: 40vw !important;
+	max-width: 35vw !important;
 }
 /* message > picture */
 html[data-theme="telegram"] .rcx-message picture {
@@ -694,6 +694,7 @@ html[data-theme="telegram"] .rcx-message[data-own=true] {
 	align-self: flex-end;
 	flex-direction: row-reverse;
     margin-right: 0px !important;
+    max-width: 900px !important;
 }
 /* message (current user) > right container */
 html[data-theme="telegram"] .rcx-message[data-own=true] > div:nth-child(2) {
@@ -1178,7 +1179,7 @@ div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--condensed a.rc
 }
 div#sidebar-region nav.rcx-sidebar--main.rcx-sidebar.rcx-sidebar--extended figure.rcx-avatar {
 	/* extended */
-	--size: 50px;
+	--size: 46px;
 	width: var(--size);
 	height: var(--size);
 	overflow: hidden;
@@ -1222,7 +1223,7 @@ a:has(.rcx-sidebar-item--highlighted) {
 
 /* sidebar > items blocks (chats) > messages (extended view) */
 span.message-author {
-		color: #489bb4;
+		color: #40a9c9;
 		font-size: 13px;
 		font-weight: 500;
 }
@@ -1526,7 +1527,7 @@ p.add-folder-button {
 [folder-label-area="settings"] form h2 {
 	text-align: center;
 	font-size: 18px;
-	margin-bottom: 25px;
+	margin-bottom: 14px;
 	text-shadow: 1px 4px black;
 }
 [folder-label-area="settings"] form div {
