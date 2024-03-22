@@ -4,7 +4,6 @@ local use (user from browser extension)
 const isLocal = false; // true
 const defaultTheme = "telegram";  // rocketchat / flat / telegram
 
-
 if (isLocal) {
 	/* -- -- -- -- -- -- -- -- -- -- -- --
 	FOR BROWSER USE.
@@ -30,6 +29,7 @@ const reservedNames = [allChatsLabel, settingsLabel, personalChatsLabel];
 const chatFolders = getLocalStorageChatFolders();
 const preparedFolders = {};
 const generalFolderUnreadChats = {};
+const customEmojis = [];
 let loaderTimeout;
 
 const buttonDarkClassName = "theme-dark-button";
@@ -100,13 +100,16 @@ function getLocalStorageThemeSettings() {
     "bg": "bg-1",
     "palette-light": "palette-green",
     "palette-dark": "palette-dark",
-    "messages-background-opacity": 100
+    "extended-avatars-size": 45,
+    "regular-avatars-size": 35,
+    "compact-avatars-size": 20
   };
 	let themeSettings = JSON.parse(localStorage.getItem("themeSettings"));
 	if (!themeSettings) {
 		themeSettings = defaultThemeSettings;
 		localStorage.setItem("themeSettings", JSON.stringify(themeSettings));
 	}
+  // ensure that all keys in user settings
   for (const [key, value] of Object.entries(defaultThemeSettings)) {
     if (!themeSettings.hasOwnProperty(key)) {
       themeSettings[key] = value;
@@ -131,8 +134,17 @@ function updateThemeSettingsHtml(data) {
 	root.setAttribute("data-palette-dark", data["palette-dark"]);
 	root.setAttribute("data-bg-opacity-light", data["bg-opacity-light"]);
 	root.setAttribute("data-bg-opacity-dark", data["bg-opacity-dark"]);
-  if (data["messages-background-opacity"]) {
-    root.style.setProperty("--messages-background-opacity", data["messages-background-opacity"] / 100);
+	root.setAttribute("data-extended-avatars-size", data["extended-avatars-size"]);
+	root.setAttribute("data-regular-avatars-size", data["regular-avatars-size"]);
+	root.setAttribute("data-compact-avatars-size", data["compact-avatars-size"]);
+  if (data["extended-avatars-size"]) {
+    root.style.setProperty("--extended-avatars-size", data["extended-avatars-size"] + "px");
+  }
+  if (data["regular-avatars-size"]) {
+    root.style.setProperty("--regular-avatars-size", data["regular-avatars-size"] + "px");
+  }
+  if (data["compact-avatars-size"]) {
+    root.style.setProperty("--compact-avatars-size", data["compact-avatars-size"] + "px");
   }
   console.debug("Theme settings updated.");
 }
@@ -523,8 +535,12 @@ function setupThemeSettingsArea() {
 					<label for="palette-light-2">Palette blue</label>
 				</div>
 				<div>
-					<input type="radio" id="palette-light-3" name="palette-light" value="palette-orange" ${checked("palette-light", "palette-orange")}/>
-					<label for="palette-light-3">Palette orange</label>
+					<input type="radio" id="palette-light-3" name="palette-light" value="palette-azure" ${checked("palette-light", "palette-azure")}/>
+					<label for="palette-light-3">Palette azure</label>
+				</div>
+				<div>
+					<input type="radio" id="palette-light-4" name="palette-light" value="palette-orange" ${checked("palette-light", "palette-orange")}/>
+					<label for="palette-light-4">Palette orange</label>
 				</div>
 			</fieldset>
 
@@ -541,17 +557,44 @@ function setupThemeSettingsArea() {
 			</fieldset>
 
       <fieldset>
-        <legend>Messages background opacity</legend>
+        <legend>Sidebar avatars size</legend>
         <div style="justify-content: center;">
-          <input
-            style="width: 100%;"
-            type="range"
-            min="50"
-            max="100"
-            value="${getThemeParam('messages-background-opacity', 100)}"
-            name="messages-background-opacity"
-            id="messages-background-opacity"
-          >
+          <label for="extended-avatars-size">
+            extended
+            <input
+              style="width: 100%;"
+              type="range"
+              min="30"
+              max="65"
+              value="${getThemeParam('extended-avatars-size', 45)}"
+              name="extended-avatars-size"
+              id="extended-avatars-size"
+            >
+          </label>
+          <label for="regular-avatars-size">
+            regular
+            <input
+              style="width: 100%;"
+              type="range"
+              min="20"
+              max="45"
+              value="${getThemeParam('regular-avatars-size', 32)}"
+              name="regular-avatars-size"
+              id="regular-avatars-size"
+            >
+          </label>
+          <label for="compact-avatars-size">
+            compact
+            <input
+              style="width: 100%;"
+              type="range"
+              min="20"
+              max="30"
+              value="${getThemeParam('compact-avatars-size', 20)}"
+              name="compact-avatars-size"
+              id="compact-avatars-size"
+            >
+          </label>
         </div>
       </fieldset>
 		</form>
@@ -710,9 +753,7 @@ async function setupChatsLoader() {
 
 function formatExtendedNavbarItems(item) {
 	// sidebar: messages formatting (extended view)
-	if (!item) {
-		return item;
-	}
+	if (!item) return item;
 
 	let isHighlighted = item.querySelectorAll(".rcx-sidebar-item--highlighted");
 	let isChat = item.querySelector("[aria-label]");
@@ -741,7 +782,6 @@ function formatExtendedNavbarItems(item) {
 		author = author[0];
 		let message = messageSpan.innerHTML.slice(author.length + 1);
 		if (message.length) {
-			message = message;
 			messageSpan.innerHTML = `<span class="message-author">${author}:</span> <span class="message-body-text">${message}</span>`;
 		} else {
 			messageSpan.innerHTML = `<span class="message-author">${author}</span>`;
@@ -755,25 +795,26 @@ function formatExtendedNavbarItems(item) {
 function formatStickerMessages() {
 	let notFormattedStickerMessages = document.querySelectorAll(".rcx-message:not(.is-sticker-message)");
 	notFormattedStickerMessages.forEach(message => {
-		let isSequential = Array.from(message.classList).includes("rcx-message--sequential");
-		let messageContainer = message.querySelector(".rcx-message-container:not(.rcx-message-container--left)");
+    let messageContainer = message.querySelector(".rcx-message-container:not(.rcx-message-container--left)");
 		if (!messageContainer) return;
 		let messageBody = messageContainer.querySelector(".rcx-message-body");
 		if (!messageBody) return;
 		let messageEmoji = messageBody.querySelectorAll(".rcx-message__emoji");
 		if (!messageEmoji) return;
+		let isSequential = Array.from(message.classList).includes("rcx-message--sequential");
 		let withReactions = !!messageContainer.querySelector(".rcx-message-reactions__container") ? 1 : 0;
 		let withThread = !!messageContainer.querySelector(".rcx-message-metrics__content-item") ? 1 : 0;
 		let withMessageReadReceipt = !!messageContainer.querySelector("i.rcx-icon--name-check") ? 1 : 0;
+		let withCustomElements = !!messageContainer.querySelector(".new-header-container") ? 1 : 0;
 
 		const childElementByCondition = {
 			// if withMessageReadReceipt -> messageContainer has different child elements count (+1)
 			// if withThread -> messageContainer has different child elements count (+1)
 			// if withReactions -> messageContainer has different child elements count (+1)
-			cond_1: 1 + withReactions + withThread + withMessageReadReceipt,
-			cond_2: 2 + withReactions + withThread + withMessageReadReceipt,
-			cond_3: 2 + withReactions + withThread + withMessageReadReceipt,
-			cond_4: 3 + withReactions + withThread + withMessageReadReceipt,
+			cond_1: 1 + withReactions + withThread + withMessageReadReceipt + withCustomElements,
+			cond_2: 2 + withReactions + withThread + withMessageReadReceipt + withCustomElements,
+			cond_3: 2 + withReactions + withThread + withMessageReadReceipt + withCustomElements,
+			cond_4: 3 + withReactions + withThread + withMessageReadReceipt + withCustomElements,
 		};
 		if (
 			(
@@ -825,9 +866,109 @@ function handleChatLoader() {
 }
 
 
-function loaderAndStickersHandler() {
+function formatMessageRoleBadges(message) {
+  // move roles from header to avatar container
+  let is_formatted = false;
+  let rolesContainer = message.querySelector(".rcx-box.rcx-box--full.rcx-message-header__roles");
+  if (rolesContainer) {
+    let avatarBlock = message.querySelector(".rcx-message-container--left")
+    if (avatarBlock) {
+      let newRolesContainer = rolesContainer.cloneNode(true);
+      newRolesContainer.classList.add("new-roles-container");
+      if (avatarBlock.querySelector(".new-roles-container") === null) {
+        avatarBlock.append(newRolesContainer);
+      }
+      is_formatted = true;
+    }
+  }
+	return is_formatted;
+}
+
+
+function formatOwnMessageHeader(message) {
+  // move header to bottom in own-messages
+  let is_formatted = false;
+  let isOwnMessage = message.getAttribute("data-own") == "true";
+  if (isOwnMessage) {
+    let header = message.querySelector(".rcx-message-header");
+    let messageContainer = message.querySelector(".rcx-message-container:nth-child(2):not(.rcx-message-container--left)");
+    // messageContainer.append(header);
+    let newHeader = header.cloneNode(true);
+    newHeader.classList.add("new-header-container");
+    if (messageContainer.querySelector(".new-header-container") === null) {
+      messageContainer.append(newHeader);
+    }
+    is_formatted = true;
+  }
+	return is_formatted;
+}
+
+
+function formatPollMessage(message) {
+  // format polls.
+  let is_formatted = false;
+  let isPollMessage = message.querySelector(".rcx-message-container--left:has(img[src*='poll.bot'])") !== null;
+  if (isPollMessage) {
+
+    let potensionalVotesInfoBlocks = message.querySelectorAll(".rcx-box.rcx-box--full > span");
+    potensionalVotesInfoBlocks.forEach(elem => {
+      let innerText = elem.innerText;
+      let isVotesInfoBlock = innerText.indexOf("vote -") !== -1 || innerText.indexOf("votes -") !== -1;
+      if (isVotesInfoBlock) {
+        elem.parentNode.classList.add("poll-votes-info-block");
+        elem.parentNode.style.setProperty("display", "none", "important");
+      }
+    })
+
+    let toggleVotesInfoElem = document.createElement("a");
+    toggleVotesInfoElem.innerHTML = "<span class='poll-show-votes-info-button'>show votes</span>";
+    toggleVotesInfoElem.addEventListener('click', (e) => {
+      e.preventDefault();
+      let votesInfoBlocks = e.target.parentNode.parentNode.querySelectorAll(".poll-votes-info-block");
+      votesInfoBlocks.forEach(elem => {
+        let value = elem.style.display === "none" ? "flex" : "none";
+        elem.style.setProperty("display", value, "important");
+      })
+    })
+
+    let pollBlock = message.querySelector(".rcx-message-block--width-fixed");
+    pollBlock.parentNode.append(toggleVotesInfoElem);
+
+    is_formatted = true;
+
+  }
+	return is_formatted;
+}
+
+
+function formatMessages() {
+	// reformat messages.
+	let messages = document.querySelectorAll(".rcx-message[data-id]:not(.rcx-message--sequential):not(.is-formatted-message):not(.is-processed-message)");
+	messages.forEach(message => {
+		// move roles from header to avatar container
+		let is_formatted_badges = formatMessageRoleBadges(message);
+
+		// move header to bottom in own-messages
+		let is_formatted_header = formatOwnMessageHeader(message);
+
+		// format polls.
+		// let is_formatted_poll = formatPollMessage(message);  // TODO.
+
+		let result = [
+			is_formatted_badges,
+			is_formatted_header,
+			// is_formatted_poll,  // TODO.
+		]
+		message.classList.add("is-processed-message");
+		if (result.some(elem => !!elem)) message.classList.add("is-formatted-message");
+  })
+}
+
+
+function loaderAndMessagesHandler() {
 	let bodyObserver = new MutationObserver(function (mutations) {
 		formatStickerMessages();
+		formatMessages();
 		handleChatLoader();
 	});
 	bodyObserver.observe(document.body, { attributes: true, childList: true, characterData: true, subtree: true });
@@ -840,8 +981,8 @@ async function setupNavbar(navbarItemsContainer) {
 	const sidebarWidthLg = getComputedStyle(root).getPropertyValue("--sidebar-lg-width");
 	const sidebarFoldersWidth = getComputedStyle(root).getPropertyValue("--sidebar-folders-width");
 	const sidebarAdditionalWidth = 0;  // TODO
-	const sidebarAdditionalWidthMd = 75;  // TODO
-	const sidebarAdditionalWidthLg = 155;  // TODO
+	const sidebarAdditionalWidthMd = 35;  // TODO
+	const sidebarAdditionalWidthLg = 115;  // TODO
 
 	// set sidebar width
 	const newSidebarWidth = `calc(calc(${sidebarWidth} + ${sidebarFoldersWidth}) + ${sidebarAdditionalWidth}px)`;
@@ -881,12 +1022,12 @@ async function setupNavbar(navbarItemsContainer) {
 			// prepare folders chats
 			let elemAriaLabel = item.firstChild.getAttribute("aria-label");
 			if (itemLabels.includes(elemAriaLabel)) {
-        preparedFolders[folderName].push(item.cloneNode(true));
+				preparedFolders[folderName].push(item.cloneNode(true));
 			}
 			// prepare personal chats
 			let elemHref = item.firstChild.getAttribute("href");
 			if (elemHref.indexOf("direct/") !== -1 && personalChats.indexOf(item) === -1) {
-        personalChats.push(item);
+				personalChats.push(item);
 			}
 		}
 	}
@@ -912,18 +1053,36 @@ async function setupNavbar(navbarItemsContainer) {
 }
 
 
-function countFolderUnreadedChats(folderContainer, isGeneralFolder) {
+function countFolderUnreadChatsAndReorder(folderContainer, isGeneralFolder) {
 	if (isGeneralFolder) return;  // TODO: temp
 
 	let folderUnreadedChats = 0;
-	let allChats = folderContainer.querySelectorAll("a[aria-label]");
-	allChats.forEach(element => {
-		/*
-			`.rcx-sidebar-item--highlighted` jumping from element to element
-			in different chat views (compact/regular/extended)
-		 */
-		let isUnreadedChat = element.querySelectorAll(".rcx-sidebar-item--highlighted");
-		if (isUnreadedChat.length) folderUnreadedChats += 1;
+	let prevChatHasNoNewMessages;
+	let manageButtons = folderContainer.querySelector("div.manage-folder-buttons");
+	let folderChatsLinks = folderContainer.querySelectorAll("a[aria-label]");
+
+	folderChatsLinks.forEach(chatLink => {
+		/* `.rcx-sidebar-item--highlighted` jumping from element to element in different chat views (compact/regular/extended) */
+		let isUnreadChat = chatLink.querySelectorAll(".rcx-sidebar-item--highlighted");
+		if (isUnreadChat.length) {
+			// count for badges
+			folderUnreadedChats += 1;
+			if (prevChatHasNoNewMessages === true) {
+				/* prev elem has no unread messages - reorder.
+						[chat: prev]  <-- no new messages
+						[chat: current *unread messages*]  <-- move this chat on top
+				*/
+				let chat = chatLink.closest("div[data-index]")
+				if (manageButtons) {
+					manageButtons.after(chat);
+				} else {
+					folderContainer.prepend(chat);
+				}
+			}
+			prevChatHasNoNewMessages = false;
+		} else {
+			prevChatHasNoNewMessages = true;
+		}
 	});
 
 	// set counter
@@ -959,10 +1118,7 @@ function countFolderUnreadedChatsInitial(navbarItemsContainer) {
 
 	let allChats = navbarItemsContainer.querySelectorAll("a[aria-label]");
 	allChats.forEach(element => {
-		/*
-			`.rcx-sidebar-item--highlighted` jumping from element to element
-			in different chat views (compact/regular/extended)
-		 */
+		/* `.rcx-sidebar-item--highlighted` jumping from element to element in different chat views (compact/regular/extended) */
 		let isUnreadedChat = element.querySelectorAll(".rcx-sidebar-item--highlighted");
 		if (isUnreadedChat.length) {
 			foldersUnreadedChatsCount[allChatsLabel] += 1;
@@ -988,32 +1144,42 @@ function countFolderUnreadedChatsInitial(navbarItemsContainer) {
 
 
 function syncNavbarItemsToFoldes(mutation) {
-	if (!mutation.target || !isElement(mutation.target)) return;
+  // get navbar chat elem
 	let sourceElem = mutation.target.closest("div[data-index]");
 	if (!sourceElem && (mutation.type == "childList" && mutation.addedNodes.length > 0)) {
+    // mutation on inner elements -> take closest parent
 		sourceElem = mutation.addedNodes[0].closest("div[data-index]");
 	}
+  // formatting messages in navbar chats
 	formatExtendedNavbarItems(sourceElem);
+  // copy chats into folders
 	if (sourceElem) {
-		let sourceElementAnchor = sourceElem.querySelector("a[aria-label]");
-		let sourceElementAriaLabel = sourceElementAnchor ? sourceElementAnchor.getAttribute("aria-label") : null;
-		let folderElems = document.querySelectorAll("div.sidebar-folder-container div[data-index]");
-		folderElems.forEach(element => {
-			let elementAnchor = element.querySelector("a[aria-label]");
-			let elementAriaLabel = elementAnchor ? elementAnchor.getAttribute("aria-label") : "null";
-			if (elementAriaLabel === sourceElementAriaLabel) {
-				element.innerHTML = sourceElem.innerHTML;
+		let sourceElementLink = sourceElem.querySelector("a[aria-label]");
+		let sourceElementAriaLabel = sourceElementLink ? sourceElementLink.getAttribute("aria-label") : null;  // not str!
+		let allFoldersItems = document.querySelectorAll("div.sidebar-folder-container div[data-index]");
+		allFoldersItems.forEach(folderItem => {
+      // iterate over all folders items (chats) and compare them with sourceElem
+			let folderItemLink = folderItem.querySelector("a[aria-label]");
+			let folderItemAriaLabel = folderItemLink ? folderItemLink.getAttribute("aria-label") : "null";  // str!
+			if (folderItemAriaLabel === sourceElementAriaLabel) {
+        // sourceElem same as folderElem -> replace folderItem with sourceElem
+				folderItem.innerHTML = sourceElem.innerHTML;
 			}
 		});
 	};
 }
 
 
-function startObserveNavbarItems(navbarItemsContainer) {
+function startObserveDefaultNavbarItems(navbarItemsContainer) {
 	let observer = new MutationObserver(function (mutations) {
 		// console.log("observer.takeRecords() - ", observer.takeRecords());
 		// countFolderUnreadedChatsInitial(navbarItemsContainer); // FIXME: observe на каждую папку отдельно
 		mutations.forEach(function (mutation) {
+      // no changes on children
+      if (mutation.type == "childList" && mutation.addedNodes.length == 0 && mutation.removedNodes.length == 0) return;
+      // no target or target not DOM Element
+      if (!mutation.target || !isElement(mutation.target)) return;
+      // syncing chats into folders
 			syncNavbarItemsToFoldes(mutation);
 		});
 	});
@@ -1023,9 +1189,9 @@ function startObserveNavbarItems(navbarItemsContainer) {
 
 function startObserveFolderItems(folderItemsContainer, isGeneralFolder) {
 	let observer = new MutationObserver(function (mutations) {
-		countFolderUnreadedChats(folderItemsContainer, isGeneralFolder);
+		countFolderUnreadChatsAndReorder(folderItemsContainer, isGeneralFolder);
 	});
-	observer.observe(folderItemsContainer, { attributes: true, childList: true, characterData: true, subtree: true });
+	observer.observe(folderItemsContainer, { attributes: true, attributeOldValue: true, childList: true, characterData: true, characterDataOldValue: true, subtree: true });
 }
 
 
@@ -1060,26 +1226,36 @@ async function start() {
 	async function getSideBarElems() {
 		let navbar = document.querySelector("nav.rcx-sidebar");
 		if (navbar) {
-			let navbarItemsContainer = navbar.querySelector("div[style*='box-sizing']");
-			let navBarItems = navbar.querySelectorAll("div[data-index]:has(a.rcx-sidebar-item)");
-			if (navBarItems.length != 0 && navbarItemsContainer) {
+			let defaultNavbarItemsContainer = navbar.querySelector("div[style*='box-sizing']");
+			let defaultNavBarItems = navbar.querySelectorAll("div[data-index]:has(a.rcx-sidebar-item)");
+			if (defaultNavBarItems.length != 0 && defaultNavbarItemsContainer) {
 				// reactDOM loaded
 				clearInterval(onLoadInterval);
 
 				chatsUnreadStatusDataDivSetup();
-				await setupNavbar(navbarItemsContainer);
+				await setupNavbar(defaultNavbarItemsContainer);
 				await setupChatsLoader();
-				loaderAndStickersHandler();
-				startObserveNavbarItems(navbarItemsContainer);
-				countFolderUnreadedChatsInitial(navbarItemsContainer);
+				loaderAndMessagesHandler();
+				startObserveDefaultNavbarItems(defaultNavbarItemsContainer);
+				countFolderUnreadedChatsInitial(defaultNavbarItemsContainer);
 				startObserveMainPalette();
 				handlePopups();
 
-				let folders = document.querySelectorAll("div.sidebar-folder-container");
-				folders.forEach((folderItemsContainer) => {
+				let allFolderContainers = document.querySelectorAll("div.sidebar-folder-container");
+				allFolderContainers.forEach((folderItemsContainer) => {
 					startObserveFolderItems(folderItemsContainer, false);
 				});
-				startObserveFolderItems(navbarItemsContainer, true);
+				startObserveFolderItems(defaultNavbarItemsContainer, true);
+
+
+
+
+				// await setupOneClickStickers();
+        // startObserveMainElement();
+
+
+
+
 			}
 		}
 	}
